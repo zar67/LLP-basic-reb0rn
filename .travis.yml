@@ -15,7 +15,7 @@ matrix:
     # Code Style
     - os: linux
       name: "CODE::STYLE"
-      dist: xenial
+      dist: bionic
       compiler: clang-format
       env:
         - MATRIX_EVAL=""
@@ -28,12 +28,12 @@ matrix:
     # Code Quality
     - os: linux
       name: "CODE::QUALITY"
-      dist: xenial
+      dist: bionic
       compiler: clang
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
             - sourceline: 'ppa:jonathonf/development-tools'
       env:
         - MATRIX_EVAL="CC=clang && CXX=clang++"
@@ -41,9 +41,9 @@ matrix:
         - chmod +x ${TRAVIS_BUILD_DIR}/.travis.cache && ${TRAVIS_BUILD_DIR}/.travis.cache --load
         - sudo apt-get update
         - sudo apt-get install -y --no-install-recommends --no-install-suggests
-          gcc-8 g++-8 libtbb-dev libharfbuzz-bin libharfbuzz-dev libxrandr-dev
+          gcc-9 libtbb-dev libharfbuzz-bin libharfbuzz-dev libxrandr-dev
           libxi-dev libxinerama-dev libxcursor-dev libgl1-mesa-dev
-          libglu1-mesa-dev cppcheck clang
+          libglu1-mesa-dev cppcheck clang libstdc++-9-dev
         - ${TRAVIS_BUILD_DIR}/.travis.cache --save
         - eval "$(curl -sL https://raw.githubusercontent.com/ryuichis/oclint-cpp-travis-ci-examples/master/oclint-ci-install.sh)"
         - cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -H. -Bbuild
@@ -53,18 +53,19 @@ matrix:
           --error-exitcode=1 --force  --inline-suppr --suppressions-list=.cppcheck
           --platform=unix64 --std=c++14 --language=c++ -I src main.cpp src/*
         - oclint-json-compilation-database
-          -e Libs -e external -e asge -e _deps
+          -e Libs -e _deps -e external/asge/include/Engine
           -enable-clang-static-analyzer -p ./build
+          -- -std=c++17
 
     # Linux GCC Build
     - os: linux
       name: "CODE::BUILD"
-      dist: xenial
+      dist: bionic
       compiler: cmake
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
             - sourceline: 'ppa:jonathonf/development-tools'
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
