@@ -55,7 +55,6 @@ matrix:
         - oclint-json-compilation-database
           -e Libs -e _deps -e external/asge/include/Engine
           -enable-clang-static-analyzer -p ./build
-          -- -std=c++17
 
     # Linux GCC Build
     - os: linux
