@@ -5,6 +5,11 @@
 #include <Engine/InputEvents.h>
 #include <Engine/Keys.h>
 #include <Engine/Sprite.h>
+#include <Engine/FileIO.h>
+
+#include <iostream>
+#include <fstream>
+#include <nlohmann/json.hpp>
 
 #include "game.h"
 /**
@@ -54,6 +59,8 @@ bool MyASGEGame::init()
 
   mouse_callback_id = inputs->addCallbackFnc(
     ASGE::E_MOUSE_CLICK, &MyASGEGame::clickHandler, this);
+
+    map_data.LoadRooms();
 
   return true;
 }

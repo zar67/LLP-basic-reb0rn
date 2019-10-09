@@ -2,6 +2,8 @@
 #include <Engine/OGLGame.h>
 #include <string>
 
+#include "../map/DataLoader.h"
+
 /**
  *  An OpenGL Game based on ASGE.
  */
@@ -23,4 +25,6 @@ class MyASGEGame : public ASGE::OGLGame
   int key_callback_id = -1;   /**< Key Input Callback ID. */
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
   bool in_menu = true;
+
+  DataLoader map_data;
 };
