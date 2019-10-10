@@ -6,14 +6,12 @@
 
 void Action::setup(int id,
                    std::string action,
-                   int object_affected,
                    int* required_objects,
                    int required_room,
                    std::string output)
 {
   ID = id;
   verb = action;
-  object = object_affected;
 
   for (int i = 0; i < 3; i++)
   {
@@ -32,11 +30,6 @@ int Action::actionID()
 std::string Action::actionVerb()
 {
   return verb;
-}
-
-int Action::actionObject()
-{
-  return object;
 }
 
 int* Action::objectsNeeded()

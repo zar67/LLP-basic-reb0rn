@@ -101,7 +101,7 @@
     "ID": 15,
     "Name": "BOAT",
     "Description": "YOU ARE A PIRATE!",
-    "Collectible": false,
+    "Collectible": true,
     "Hidden": false
     },
     {

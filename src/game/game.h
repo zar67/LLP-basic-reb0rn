@@ -3,6 +3,7 @@
 #include <string>
 
 #include "../Action.h"
+#include "../Input.h"
 #include "../map/Object.h"
 #include "../map/Room.h"
 #include "GameConstants.h"
@@ -33,7 +34,9 @@ class MyASGEGame : public ASGE::OGLGame
 
   void LoadRooms();
   void LoadObjects();
-  void LoadActions();
+
+  bool CheckInventory(int ID);
+  bool validateInput();
 
   int key_callback_id = -1;   /**< Key Input Callback ID. */
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
@@ -41,11 +44,16 @@ class MyASGEGame : public ASGE::OGLGame
   int screen_open = 0;
   int menu_option = 0;
 
+  Input input_controller = Input();
+
   Room rooms[DATA::ROOM_NUM];
   Object objects[DATA::OBJECT_NUM];
-  Action actions[DATA::ACTION_NUM];
 
   int inventory[DATA::OBJECT_NUM];
   int current_room = 57;
+  int current_action = -1;
+  int current_action_object = -1;
   int score = 0;
+
+  std::string action_response = "";
 };

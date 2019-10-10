@@ -13,8 +13,8 @@ class Object
   Object() = default;
   ~Object() = default;
 
-  void
-  setup(int id, std::string descriptor, std::string examine, bool carry, bool hide);
+  void setup(
+    int id, std::string descriptor, std::string examine, bool carry, bool hide);
 
   int objectID();
   std::string objectName();
