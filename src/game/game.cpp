@@ -70,17 +70,17 @@ void MyASGEGame::LoadRooms()
     {
       int id = room.value()["ID"];
       std::string name = room.value()["Name"];
-      bool n = room.value()["Exits"][0];
-      bool e = room.value()["Exits"][1];
-      bool s = room.value()["Exits"][2];
-      bool w = room.value()["Exits"][3];
+      bool north = room.value()["Exits"][0];
+      bool east = room.value()["Exits"][1];
+      bool south = room.value()["Exits"][2];
+      bool west = room.value()["Exits"][3];
       int items[5] = { room.value()["Items"][0],
                        room.value()["Items"][1],
                        room.value()["Items"][2],
                        room.value()["Items"][3],
                        room.value()["Items"][4] };
 
-      rooms[id].setup(id, name, n, e, s, w, items);
+      rooms[id].setup(id, name, north, east, south, west, items);
     }
 
     file.close();
@@ -112,10 +112,10 @@ void MyASGEGame::LoadObjects()
       int id = object.value()["ID"];
       std::string name = object.value()["Name"];
       std::string description = object.value()["Description"];
-      bool c = object.value()["Collectible"];
-      bool h = object.value()["Hidden"];
+      bool carry = object.value()["Collectible"];
+      bool hide = object.value()["Hidden"];
 
-      objects[id - 1].setup(id, name, description, c, h);
+      objects[id - 1].setup(id, name, description, carry, hide);
     }
 
     file.close();
@@ -271,8 +271,8 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
   }
   else if (screen_open == GAME_SCREEN)
   {
-      // Take in action
-      // Typing
+    // Take in action
+    // Typing
   }
   else if (screen_open == GAME_OVER_SCREEN)
   {
@@ -347,7 +347,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
 
   if (screen_open == GAME_SCREEN)
   {
-      
+    // Update game
   }
 }
 
@@ -378,6 +378,7 @@ void MyASGEGame::render(const ASGE::GameTime&)
   }
   else if (screen_open == GAME_SCREEN)
   {
+    // Render game screen
   }
   else if (screen_open == GAME_OVER_SCREEN)
   {

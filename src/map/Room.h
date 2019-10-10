@@ -16,10 +16,10 @@ class Room
 
   void setup(int id,
              std::string descriptor,
-             bool n,
-             bool e,
-             bool s,
-             bool w,
+             bool north,
+             bool east,
+             bool south,
+             bool west,
              int room_objects[5]);
 
   int roomID();

@@ -14,7 +14,7 @@ class Object
   ~Object() = default;
 
   void
-  setup(int id, std::string descriptor, std::string examine, bool c, bool h);
+  setup(int id, std::string descriptor, std::string examine, bool carry, bool hide);
 
   int objectID();
   std::string objectName();
@@ -22,7 +22,7 @@ class Object
   bool collectible();
   bool hidden();
 
-  void hidden(bool h);
+  void hidden(bool hide);
 
  private:
   int ID;

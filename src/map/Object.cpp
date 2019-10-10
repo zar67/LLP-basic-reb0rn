@@ -5,13 +5,13 @@
 #include "Object.h"
 
 void Object::setup(
-  int id, std::string descriptor, std::string examine, bool c, bool h)
+  int id, std::string descriptor, std::string examine, bool carry, bool hide)
 {
   ID = id;
   name = descriptor;
   description = examine;
-  can_pick_up = c;
-  hiding = h;
+  can_pick_up = carry;
+  hiding = hide;
 }
 
 int Object::objectID()
@@ -39,7 +39,7 @@ bool Object::hidden()
   return hiding;
 }
 
-void Object::hidden(bool h)
+void Object::hidden(bool hide)
 {
-  hiding = h;
+  hiding = hide;
 }
