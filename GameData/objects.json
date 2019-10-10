@@ -1,184 +1,184 @@
 [
     {
-        "ID": 1,
-        "Name": "PAINTING",
-        "Description": "A creepy painting, the eyes seem to be watching you...",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 2,
-        "Name": "RING",
-        "Description": "A wedding ring, scuffed and dusty.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 3,
-        "Name": "BOOK OF SPELLS",
-        "Description": "A book with weird words and images in it.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 4,
-        "Name": "ROPE",
-        "Description": "A coil of rope.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 5,
-        "Name": "SCROLL",
-        "Description": "A piece of parchment with a foriegn language on it",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 6,
-        "Name": "BAG OF COINS",
-        "Description": "A large bag of money.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 7,
-        "Name": "STATUE",
-        "Description": "A small metal statue of a man.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 8,
-        "Name": "CANDLESTICK",
-        "Description": "A metal stick to hold candles.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 9,
-        "Name": "MATCHES",
-        "Description": "Can light a candle.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 10,
-        "Name": "VACUUM CLEANER",
-        "Description": "To suck up all that dirt.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 11,
-        "Name": "BATTERIES",
-        "Description": "POWERRR!",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 12,
-        "Name": "SHOVEL",
-        "Description": "Dig things up",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 13,
-        "Name": "AXE",
-        "Description": "Chops logs.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 14,
-        "Name": "GOBLET",
-        "Description": "A fancy metal drinking container.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 15,
-        "Name": "BOAT",
-        "Description": "You are a pirate!",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 16,
-        "Name": "AEROSOL CAN",
-        "Description": "To hide nasty smells.",
-        "Collectible": true,
-        "Hidden": false
-    }, 
-    {
-        "ID": 17,
-        "Name": "CANDLE",
-        "Description": "Let there be light.",
-        "Collectible": true,
-        "Hidden": true
-    }, 
-    {
-        "ID": 18,
-        "Name": "KEY",
-        "Description": "Unlocks doors.",
-        "Collectible": true,
-        "Hidden": true
-    }, 
-    {
-        "ID": 19,
-        "Name": "DOOR",
-        "Description": "I mean, it's a door.",
-        "Collectible": false,
-        "Hidden": false
-    }, 
-    {
-        "ID": 20,
-        "Name": "DRAWER",
-        "Description": "Stores things.",
-        "Collectible": false,
-        "Hidden": false
-    }, 
-    {
-        "ID": 21,
-        "Name": "DESK",
-        "Description": "Good for working at.",
-        "Collectible": false,
-        "Hidden": false
-    }, 
-    {
-        "ID": 22,
-        "Name": "COAT",
-        "Description": "For when it gets chilly.",
-        "Collectible": false,
-        "Hidden": false
-    }, 
-    {
-        "ID": 23,
-        "Name": "BATS",
-        "Description": "ARGGGH! Bats!",
-        "Collectible": false,
-        "Hidden": false
+      "ID": 1,
+      "Name": "PAINTING",
+      "Description": "A creepy painting, the eyes seem to be watching you...",
+      "Collectible": true,
+      "Hidden": false
     },
     {
-        "ID": 24,
-        "Name": "GHOSTS",
-        "Description": "Spooky.",
-        "Collectible": false,
-        "Hidden": false
+      "ID": 2,
+      "Name": "RING",
+      "Description": "A wedding ring, scuffed and dusty.",
+      "Collectible": true,
+      "Hidden": false
     },
     {
-        "ID": 25,
-        "Name": "BOOKS",
-        "Description": "They are demonic books.",
-        "Collectible": false,
-        "Hidden": false
+      "ID": 3,
+      "Name": "BOOK OF SPELLS",
+      "Description": "A book with weird words and images in it.",
+      "Collectible": true,
+      "Hidden": false
     },
     {
-        "ID": 26,
-        "Name": "TREE",
-        "Description": "It's a tall tree.",
-        "Collectible": false,
-        "Hidden": false
+      "ID": 4,
+      "Name": "ROPE",
+      "Description": "A coil of rope.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 5,
+      "Name": "SCROLL",
+      "Description": "A piece of parchment with a foriegn language on it",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 6,
+      "Name": "BAG OF COINS",
+      "Description": "A large bag of money.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 7,
+      "Name": "STATUE",
+      "Description": "A small metal statue of a man.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 8,
+      "Name": "CANDLESTICK",
+      "Description": "A metal stick to hold candles.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 9,
+      "Name": "MATCHES",
+      "Description": "Can light a candle.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 10,
+      "Name": "VACUUM CLEANER",
+      "Description": "To suck up all that dirt.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 11,
+      "Name": "BATTERIES",
+      "Description": "POWERRR!",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 12,
+      "Name": "SHOVEL",
+      "Description": "Dig things up",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 13,
+      "Name": "AXE",
+      "Description": "Chops logs.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 14,
+      "Name": "GOBLET",
+      "Description": "A fancy metal drinking container.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 15,
+      "Name": "BOAT",
+      "Description": "You are a pirate!",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 16,
+      "Name": "AEROSOL CAN",
+      "Description": "To hide nasty smells.",
+      "Collectible": true,
+      "Hidden": false
+    },
+    {
+      "ID": 17,
+      "Name": "CANDLE",
+      "Description": "Let there be light.",
+      "Collectible": true,
+      "Hidden": true
+    },
+    {
+      "ID": 18,
+      "Name": "KEY",
+      "Description": "Unlocks doors.",
+      "Collectible": true,
+      "Hidden": true
+    },
+    {
+      "ID": 19,
+      "Name": "DOOR",
+      "Description": "I mean, it's a door.",
+      "Collectible": false,
+      "Hidden": false
+    },
+    {
+      "ID": 20,
+      "Name": "DRAWER",
+      "Description": "Stores things.",
+      "Collectible": false,
+      "Hidden": false
+    },
+    {
+      "ID": 21,
+      "Name": "DESK",
+      "Description": "Good for working at.",
+      "Collectible": false,
+      "Hidden": false
+    },
+    {
+      "ID": 22,
+      "Name": "COAT",
+      "Description": "For when it gets chilly.",
+      "Collectible": false,
+      "Hidden": false
+    },
+    {
+      "ID": 23,
+      "Name": "BATS",
+      "Description": "ARGGGHH! Bats!",
+      "Collectible": false,
+      "Hidden": false
+    },
+    {
+      "ID": 24,
+      "Name": "GHOST",
+      "Description": "SPOOKY! Run!",
+      "Collectible": false,
+      "Hidden": false
+    },
+    {
+      "ID": 25,
+      "Name": "BOOKS",
+      "Description": "They are demonic books.",
+      "Collectible": false,
+      "Hidden": false
+    },
+    {
+      "ID": 26,
+      "Name": "TREE",
+      "Description": "It's a tall tree",
+      "Collectible": false,
+      "Hidden": false
     }
-]
+  ]

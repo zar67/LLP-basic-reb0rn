@@ -71,7 +71,44 @@ void MyASGEGame::LoadRooms()
   }
   else
   {
-    std::cout << "File not found" << std::endl;
+    std::cout << "Rooms file not found" << std::endl;
+  }
+}
+
+void MyASGEGame::LoadObjects()
+{
+  using File = ASGE::FILEIO::File;
+  File file = File();
+
+  // Open file
+  if (file.open("/data/objects.json", ASGE::FILEIO::File::IOMode::READ))
+  {
+    // Get file data
+    using Buffer = ASGE::FILEIO::IOBuffer;
+    Buffer buffer = file.read();
+
+    std::cout << buffer.as_char() << std::endl;
+
+    // Read file data as JSON
+    auto file_data = nlohmann::json::parse(buffer.as_char());
+
+    // Populate each room with it's information
+    for (const auto& object : file_data.items())
+    {
+      int id = object.value()["ID"];
+      std::string name = object.value()["Name"];
+      std::string description = object.value()["Description"];
+      bool c = object.value()["Collectible"];
+      bool h = object.value()["Hidden"];
+
+      Objects[id-1].setup(id, name, description, c, h);
+    }
+
+    file.close();
+  }
+  else
+  {
+    std::cout << "Objects file not found" << std::endl;
   }
 }
 
@@ -102,6 +139,7 @@ bool MyASGEGame::init()
     ASGE::E_MOUSE_CLICK, &MyASGEGame::clickHandler, this);
 
   LoadRooms();
+  LoadObjects();
 
   return true;
 }

@@ -4,6 +4,7 @@
 
 #include "GameConstants.h"
 #include "../map/Room.h"
+#include "../map/Object.h"
 
 /**
  *  An OpenGL Game based on ASGE.
@@ -28,6 +29,8 @@ class MyASGEGame : public ASGE::OGLGame
   bool in_menu = true;
 
   void LoadRooms();
+  void LoadObjects();
 
   Room Rooms[DATA::ROOM_NUM];
+  Object Objects[DATA::OBJECT_NUM];
 };
