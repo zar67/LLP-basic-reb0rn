@@ -11,7 +11,7 @@ namespace DATA
 {
     static const int ROOM_NUM = 64;
     static const int OBJECT_NUM = 26;
-    static const int ACTION_NUM = 24;
+    static const int ACTION_NUM = 25;
 };
 
 

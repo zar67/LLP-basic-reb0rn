@@ -91,7 +91,7 @@
         "ID": 11,
         "Verb": "OPEN",
         "Object": 19,
-        "Required Objects": [18, 0, 0],
+        "Required Objects": [18, -1, -1],
         "Required Room": 28,
         "Response": "The door unlocks!"
     },
@@ -99,7 +99,7 @@
         "ID": 12,
         "Verb": "OPEN",
         "Object": 20,
-        "Required Objects": [18, 0, 0],
+        "Required Objects": [18, -1, -1],
         "Required Room": 43,
         "Response": "The drawer opens and reveals a candle inside."
     },
@@ -108,16 +108,16 @@
         "Verb": "READ",
         "Object": 25,
         "Required Objects": [-1, -1, -1],
-        "Required Room": -1,
+        "Required Room": 42,
         "Response": "They are demonic books."
     },
     {
         "ID": 14,
         "Verb": "READ",
         "Object": 3,
-        "Required Objects": [3, 0, 0],
+        "Required Objects": [3, -1, -1],
         "Required Room": -1,
-        "Response": "USE THIS WORD WITH CADE 'XZANFAR'"
+        "Response": "Use this word with care 'XZANFAR'"
     },
     {
         "ID": 15,
@@ -130,8 +130,8 @@
     {
         "ID": 16,
         "Verb": "DIG",
-        "Object": 0,
-        "Required Objects": [12, 0, 0],
+        "Object": -1,
+        "Required Objects": [12, -1, -1],
         "Required Room": 31,
         "Response": "The bars on the cellar window are loosened and you pull them away. \n You can now get in and out of the cellar from the cliff path."
     },
@@ -139,40 +139,41 @@
         "ID": 17,
         "Verb": "SWING",
         "Object": 13,
-        "Required Objects": [13, 0, 0],
+        "Required Objects": [13, -1, -1],
         "Required Room": 43,
-        "Response": "You swing you're axe into the wall and it breaks, revealinga secret room!"
+        "Response": "You swing you're axe into the wall and it breaks, revealing a secret room to the North."
     },
     {
         "ID": 18,
         "Verb": "CLIMB",
         "Object": 4,
-        "Required Objects": [4, 0, 0],
-        "Required Room": 12
+        "Required Objects": [4, -1, -1],
+        "Required Room": 7,
+        "Response": "You fall out of the tree, OUCH!"
     },
     {
         "ID": 19,
         "Verb": "CLIMB",
         "Object": 26,
         "Required Objects": [-1, -1, -1],
-        "Required Room": -1,
-        "Response": "You fall out of the tree. OUCH!"
+        "Required Room": 7,
+        "Response": "You fall out of the tree, OUCH!"
     },
     {
         "ID": 20,
         "Verb": "SPRAY",
         "Object": 16,
-        "Required Objects": [16, 0, 0],
+        "Required Objects": [16, -1, -1],
         "Required Room": 13,
-        "Response": ""
+        "Response": "The bats flee."
     },
     {
         "ID": 21,
         "Verb": "USE",
         "Object": 10,
-        "Required Objects": [10, 0, 0],
+        "Required Objects": [10, -1, -1],
         "Required Room": 52,
-        "Response": "All the ghosts are sucked up into the vacuum cleaner. HORRAY!"
+        "Response": "All the ghosts are sucked up into the vacuum cleaner. HOORAY!"
     },
     {
         "ID": 22,
@@ -188,13 +189,13 @@
         "Object": 17,
         "Required Objects": [8, 9, 17],
         "Required Room": -1,
-        "Response": "The candle lights."
+        "Response": "You light the candle."
     },
     {
         "ID": 24,
         "Verb": "UNLIGHT",
         "Object": 17,
-        "Required Objects": [17, 0, 0],
+        "Required Objects": [17, -1, -1],
         "Required Room": -1,
         "Response": "You extinguish the candle."
     }

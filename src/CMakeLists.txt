@@ -20,7 +20,7 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
         "game/game.h"
-        map/Navigation.cpp map/Navigation.h map/Room.cpp map/Room.h game/GameConstants.h map/Object.cpp map/Object.h)
+        map/Navigation.cpp map/Navigation.h map/Room.cpp map/Room.h game/GameConstants.h map/Object.cpp map/Object.h Action.cpp Action.h)
 
 ## the executable
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})

@@ -14,7 +14,7 @@ class Room
   Room() = default;
   ~Room() = default;
 
-   void setup(int id, std::string descriptor, bool n, bool e, bool s, bool w, int room_objects[5]);
+  void setup(int id, std::string descriptor, bool n, bool e, bool s, bool w, int room_objects[5]);
 
   int roomID();
   std::string roomName();

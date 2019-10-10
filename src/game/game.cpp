@@ -87,8 +87,6 @@ void MyASGEGame::LoadObjects()
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
 
-    std::cout << buffer.as_char() << std::endl;
-
     // Read file data as JSON
     auto file_data = nlohmann::json::parse(buffer.as_char());
 
@@ -110,6 +108,44 @@ void MyASGEGame::LoadObjects()
   {
     std::cout << "Objects file not found" << std::endl;
   }
+}
+
+void MyASGEGame::LoadActions()
+{
+    using File = ASGE::FILEIO::File;
+    File file = File();
+
+    // Open file
+    if (file.open("/data/actions.json", ASGE::FILEIO::File::IOMode::READ))
+    {
+        // Get file data
+        using Buffer = ASGE::FILEIO::IOBuffer;
+        Buffer buffer = file.read();
+
+        // Read file data as JSON
+        auto file_data = nlohmann::json::parse(buffer.as_char());
+
+        // Populate each room with it's information
+        for (const auto& action : file_data.items())
+        {
+            int id = action.value()["ID"];
+            std::string verb = action.value()["Verb"];
+            int object = action.value()["Object"];
+            int required_objects[3] = {action.value()["Required Objects"][0],
+                                     action.value()["Required Objects"][1],
+                                     action.value()["Required Objects"][2]};
+            int required_room = action.value()["Required Room"];
+            std::string response = action.value()["Response"];
+
+            Actions[id].setup(id, verb, object, required_objects, required_room, response);
+        }
+
+        file.close();
+    }
+    else
+    {
+        std::cout << "Objects file not found" << std::endl;
+    }
 }
 
 /**
@@ -140,6 +176,7 @@ bool MyASGEGame::init()
 
   LoadRooms();
   LoadObjects();
+  LoadActions();
 
   return true;
 }

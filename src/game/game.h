@@ -5,6 +5,7 @@
 #include "GameConstants.h"
 #include "../map/Room.h"
 #include "../map/Object.h"
+#include "../Action.h"
 
 /**
  *  An OpenGL Game based on ASGE.
@@ -30,7 +31,9 @@ class MyASGEGame : public ASGE::OGLGame
 
   void LoadRooms();
   void LoadObjects();
+  void LoadActions();
 
   Room Rooms[DATA::ROOM_NUM];
   Object Objects[DATA::OBJECT_NUM];
+  Action Actions[DATA::ACTION_NUM];
 };
