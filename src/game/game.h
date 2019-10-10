@@ -7,6 +7,10 @@
 #include "../map/Object.h"
 #include "../Action.h"
 
+const int MENU_SCREEN = 0;
+const int GAME_SCREEN = 1;
+const int GAME_OVER_SCREEN = 2;
+
 /**
  *  An OpenGL Game based on ASGE.
  */
@@ -25,15 +29,24 @@ class MyASGEGame : public ASGE::OGLGame
   void update(const ASGE::GameTime&) override;
   void render(const ASGE::GameTime&) override;
 
-  int key_callback_id = -1;   /**< Key Input Callback ID. */
-  int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
-  bool in_menu = true;
+  void Play();
 
   void LoadRooms();
   void LoadObjects();
   void LoadActions();
 
-  Room Rooms[DATA::ROOM_NUM];
-  Object Objects[DATA::OBJECT_NUM];
-  Action Actions[DATA::ACTION_NUM];
+  int key_callback_id = -1;   /**< Key Input Callback ID. */
+  int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
+
+  int screen_open = 0;
+  int menu_option = 0;
+
+  Room rooms[DATA::ROOM_NUM];
+  Object objects[DATA::OBJECT_NUM];
+  Action actions[DATA::ACTION_NUM];
+
+  int inventory[DATA::OBJECT_NUM];
+  int current_room = 57;
+  int score = 0;
+
 };

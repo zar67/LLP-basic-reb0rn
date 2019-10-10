@@ -19,7 +19,7 @@
  */
 MyASGEGame::MyASGEGame()
 {
-  game_name = "ASGE Game";
+  game_name = "Haunted House Adventure";
 }
 
 /**
@@ -32,6 +32,22 @@ MyASGEGame::~MyASGEGame()
 
   this->inputs->unregisterCallback(
     static_cast<unsigned int>(mouse_callback_id));
+}
+
+void MyASGEGame::Play()
+{
+    LoadRooms();
+    LoadObjects();
+
+    current_room = 57;
+    score = 0;
+
+    for (int i = 0; i < DATA::OBJECT_NUM; i++)
+    {
+        inventory[i] = 0;
+    }
+
+    screen_open = GAME_SCREEN;
 }
 
 void MyASGEGame::LoadRooms()
@@ -47,7 +63,7 @@ void MyASGEGame::LoadRooms()
     Buffer buffer = file.read();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char());
+    auto file_data = nlohmann::json::parse(buffer.as_unsigned_char());
 
     // Populate each room with it's information
     for (const auto& room : file_data.items())
@@ -64,7 +80,7 @@ void MyASGEGame::LoadRooms()
                       room.value()["Items"][3],
                       room.value()["Items"][4]};
 
-      Rooms[id].setup(id, name, n, e, s, w, items);
+      rooms[id].setup(id, name, n, e, s, w, items);
     }
 
     file.close();
@@ -88,7 +104,7 @@ void MyASGEGame::LoadObjects()
     Buffer buffer = file.read();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char());
+    auto file_data = nlohmann::json::parse(buffer.as_unsigned_char());
 
     // Populate each room with it's information
     for (const auto& object : file_data.items())
@@ -99,7 +115,7 @@ void MyASGEGame::LoadObjects()
       bool c = object.value()["Collectible"];
       bool h = object.value()["Hidden"];
 
-      Objects[id-1].setup(id, name, description, c, h);
+      objects[id-1].setup(id, name, description, c, h);
     }
 
     file.close();
@@ -123,7 +139,7 @@ void MyASGEGame::LoadActions()
         Buffer buffer = file.read();
 
         // Read file data as JSON
-        auto file_data = nlohmann::json::parse(buffer.as_char());
+        auto file_data = nlohmann::json::parse(buffer.as_unsigned_char());
 
         // Populate each room with it's information
         for (const auto& action : file_data.items())
@@ -137,14 +153,14 @@ void MyASGEGame::LoadActions()
             int required_room = action.value()["Required Room"];
             std::string response = action.value()["Response"];
 
-            Actions[id].setup(id, verb, object, required_objects, required_room, response);
+            actions[id].setup(id, verb, object, required_objects, required_room, response);
         }
 
         file.close();
     }
     else
     {
-        std::cout << "Objects file not found" << std::endl;
+        std::cout << "Actions file not found" << std::endl;
     }
 }
 
@@ -163,6 +179,9 @@ bool MyASGEGame::init()
     return false;
   }
 
+  renderer->setWindowedMode(ASGE::Renderer::WindowMode::WINDOWED);
+  renderer->setClearColour(ASGE::COLOURS::BLACK);
+
   toggleFPS();
 
   // input handling functions
@@ -174,8 +193,6 @@ bool MyASGEGame::init()
   mouse_callback_id = inputs->addCallbackFnc(
     ASGE::E_MOUSE_CLICK, &MyASGEGame::clickHandler, this);
 
-  LoadRooms();
-  LoadObjects();
   LoadActions();
 
   return true;
@@ -198,8 +215,8 @@ void MyASGEGame::setupResolution()
   // Scaling_and_MultiResolution_in_2D_Games.php
 
   // Apple II had Hi-Res support of 320x200 with four colours!!
-  game_width = 320;
-  game_height = 200;
+  game_width = 1024;
+  game_height = 768;
 }
 
 /**
@@ -219,6 +236,77 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
   if (key->key == ASGE::KEYS::KEY_ESCAPE)
   {
     signalExit();
+  }
+  else if (screen_open == MENU_SCREEN)
+  {
+      if (key->key == ASGE::KEYS::KEY_UP &&
+          key->action == ASGE::KEYS::KEY_RELEASED)
+      {
+          menu_option -=1;
+
+          if (menu_option < 0)
+          {
+            menu_option = 1;
+          }
+      }
+      else if (key->key == ASGE::KEYS::KEY_DOWN &&
+               key->action == ASGE::KEYS::KEY_RELEASED)
+      {
+          menu_option +=1;
+          menu_option %= 2;
+      }
+      else if (key->key == ASGE::KEYS::KEY_ENTER &&
+               key->action == ASGE::KEYS::KEY_RELEASED)
+      {
+          if (menu_option == 0)
+          {
+              Play();
+          }
+          else
+          {
+              signalExit();
+          }
+      }
+  }
+  else if (screen_open == GAME_SCREEN)
+  {
+
+  }
+  else if (screen_open == GAME_OVER_SCREEN)
+  {
+      if (key->key == ASGE::KEYS::KEY_UP &&
+          key->action == ASGE::KEYS::KEY_RELEASED)
+      {
+          menu_option -=1;
+
+          if (menu_option < 0)
+          {
+              menu_option = 2;
+          }
+      }
+      else if (key->key == ASGE::KEYS::KEY_DOWN &&
+               key->action == ASGE::KEYS::KEY_RELEASED)
+      {
+          menu_option +=1;
+          menu_option %= 3;
+      }
+      else if (key->key == ASGE::KEYS::KEY_ENTER &&
+               key->action == ASGE::KEYS::KEY_RELEASED)
+      {
+          if (menu_option == 0)
+          {
+              Play();
+          }
+          else if (menu_option == 1)
+          {
+              screen_open = MENU_SCREEN;
+              menu_option = 0;
+          }
+          else
+          {
+              signalExit();
+          }
+      }
   }
 }
 
@@ -255,8 +343,9 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
   // auto dt_sec = game_time.delta.count() / 1000.0;;
   // make sure you use delta time in any movement calculations!
 
-  if (!in_menu)
+  if (screen_open == GAME_SCREEN)
   {
+
   }
 }
 
@@ -271,7 +360,22 @@ void MyASGEGame::render(const ASGE::GameTime&)
 {
   renderer->setFont(0);
 
-  if (in_menu)
+
+  if (screen_open == MENU_SCREEN)
   {
+      renderer->renderText("BASIC REB0RN", 317, 200, 3, ASGE::COLOURS::GRAY);
+      renderer->renderText(menu_option == 0 ? ">> PLAY" : "   PLAY", 437, 350, 2, ASGE::COLOURS::GRAY);
+      renderer->renderText(menu_option == 1 ? ">> QUIT" : "   QUIT", 437, 450, 2, ASGE::COLOURS::GRAY);
+  }
+  else if (screen_open == GAME_SCREEN)
+  {
+
+  }
+  else if (screen_open == GAME_OVER_SCREEN)
+  {
+      renderer->renderText("GAME OVER", 377, 200, 3, ASGE::COLOURS::GRAY);
+      renderer->renderText(menu_option == 0 ? ">> PLAY AGAIN" : "   PLAY AGAIN", 372, 350, 2, ASGE::COLOURS::GRAY);
+      renderer->renderText(menu_option == 1 ? ">> MENU" : "   MENU", 372, 450, 2,  ASGE::COLOURS::GRAY);
+      renderer->renderText(menu_option == 2 ? ">> QUIT" : "   QUIT", 372, 550, 2,  ASGE::COLOURS::GRAY);
   }
 }
