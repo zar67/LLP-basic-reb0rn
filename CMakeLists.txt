@@ -23,4 +23,3 @@ set(ITCHIO_USER     "")
 
 ## enable the game project ##
 add_subdirectory(src)
-

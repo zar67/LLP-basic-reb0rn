@@ -2,6 +2,11 @@
 #include <Engine/OGLGame.h>
 #include <string>
 
+#include "GameConstants.h"
+#include "../map/Room.h"
+#include "../map/Object.h"
+#include "../Action.h"
+
 /**
  *  An OpenGL Game based on ASGE.
  */
@@ -23,4 +28,12 @@ class MyASGEGame : public ASGE::OGLGame
   int key_callback_id = -1;   /**< Key Input Callback ID. */
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
   bool in_menu = true;
+
+  void LoadRooms();
+  void LoadObjects();
+  void LoadActions();
+
+  Room Rooms[DATA::ROOM_NUM];
+  Object Objects[DATA::OBJECT_NUM];
+  Action Actions[DATA::ACTION_NUM];
 };
