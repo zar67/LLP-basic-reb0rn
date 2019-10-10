@@ -8,8 +8,10 @@
 
 #include "DataLoader.h"
 
-void DataLoader::LoadRooms()
+Room *DataLoader::LoadRooms()
 {
+    Room Rooms[DATA::ROOM_NUM];
+
     using File = ASGE::FILEIO::File;
     File file = File();
 
@@ -32,19 +34,20 @@ void DataLoader::LoadRooms()
             bool e = room.value()["Exits"][1];
             bool s = room.value()["Exits"][2];
             bool w = room.value()["Exits"][3];
+            int items[5] = {room.value()["Items"][0],
+                            room.value()["Items"][1],
+                            room.value()["Items"][2],
+                            room.value()["Items"][3],
+                            room.value()["Items"][4]};
 
-            Rooms[id].setup(id, name, n, e, s, w);
+            Rooms[id].setup(id, name, n, e, s, w, items);
         }
 
         file.close();
+        return Rooms;
     }
     else
     {
         std::cout << "File not found" << std::endl;
     }
-}
-
-Room* DataLoader::room(int index)
-{
-    return &Rooms[index];
 }

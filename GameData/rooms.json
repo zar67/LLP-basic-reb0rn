@@ -3,448 +3,384 @@
         "ID": 0,
         "Name": "DARK CORNER",
         "Exits": [false, true, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 1,
         "Name": "OVERGROWN GARDEN",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 2,
         "Name": "WOODPILE",
         "Exits": [false, true, false, true],
-        "Items": ["AXE"],
-        "Action": ""
+        "Items": [13, -1, -1, -1, -1]
     },
     {
         "ID": 3,
-        "Name": "YARD",
+        "Name": "YARD BY RUBBISH",
         "Exits": [false, true, true, true],
-        "Items": ["RUBBISH"],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 4,
         "Name": "WEED PATCH",
         "Exits": [false, true, false, true],
-        "Items": ["SHOVEL"],
-        "Action": ""
+        "Items": [12, -1, -1, -1, -1]
     },
     {
         "ID": 5,
         "Name": "FOREST",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 6,
         "Name": "THICK FOREST",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 7,
         "Name": "BLASTED TREE",
         "Exits": [false, false, true, true],
-        "Items": ["ROPE"],
-        "Action": "CLIMB TREE"
+        "Items": [4, -1, -1, -1, -1]
     },
     {
         "ID": 8,
         "Name": "CORNER OF HOUSE",
         "Exits": [true, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 9,
         "Name": "KITCHEN ENTRANCE",
         "Exits": [false, true, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 10,
         "Name": "KITCHEN",
         "Exits": [false, true, false, true],
-        "Items": ["MATCHES"],
-        "Action": ""
+        "Items": [9, -1, -1, -1, -1]
     },
     {
         "ID": 11,
         "Name": "SCULLERY DOOR",
         "Exits": [true, false, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 12,
         "Name": "DUSTY ROOM",
         "Exits": [false, true, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 13,
         "Name": "REAR TURRET ROOM",
         "Exits": [false, false, false, true],
-        "Items": ["SCROLL", "BATS"],
-        "Action": "SPRAY AEROSOL"
+        "Items": [5, 23, -1, -1, -1]
     },
     {
         "ID": 14,
         "Name": "CLEARING",
         "Exits": [true, true, false, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 15,
         "Name": "PATH",
         "Exits": [true, false, true, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 16,
         "Name": "SIDE OF HOUSE",
         "Exits": [true, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 17,
         "Name": "BACK OF HALLWAY",
         "Exits": [true, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 18,
         "Name": "DARK ALCOVE",
         "Exits": [false, true, true, false],
-        "Items": ["(BAG OF COINS)"],
-        "Action": ""
+        "Items": [6, -1, -1, -1, -1]
     },
     {
         "ID": 19,
         "Name": "SMALL DARK ROOM",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 20,
         "Name": "SPIRAL STAIRCASE",
         "Exits": [true, false, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 21,
         "Name": "WIDE PASSAGE",
         "Exits": [false, true, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 22,
         "Name": "SLIPPER STEPS",
         "Exits": [false, false, true, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 23,
         "Name": "CLIFFTOP",
         "Exits": [true, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 24,
         "Name": "CRUMBLING WALL",
         "Exits": [true, false, false, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 25,
         "Name": "GLOOMY PASSAGE",
         "Exits": [true, false, true, false],
-        "Items": ["VACUUM CLEANER"],
-        "Action": ""
+        "Items": [10, -1, -1, -1, -1]
     },
     {
         "ID": 26,
         "Name": "POOL OF LIGHT",
         "Exits": [true, true, true, false],
-        "Items": ["BATTERIES"],
-        "Action": ""
+        "Items": [11, -1, -1, -1, -1]
     },
     {
         "ID": 27,
         "Name": "VAULTED HALL",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 28,
         "Name": "HALL WITH LOCKED DOOR",
         "Exits": [false, true, false, true],
-        "Items": ["STATUE"],
-        "Action": "OPEN DOOR"
+        "Items": [7, -1, -1, -1, -1]
     },
     {
         "ID": 29,
         "Name": "TROPHY ROOM",
         "Exits": [true, false, true, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 30,
         "Name": "CELLAR",
         "Exits": [true, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 31,
         "Name": "CLIFF PATH",
         "Exits": [true, false, true, false],
-        "Items": [],
-        "Action": "DIG"
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 32,
         "Name": "CUPBOARD",
         "Exits": [false, false, true, false],
-        "Items": ["(KEY)", "COAT"],
-        "Action": ""
+        "Items": [18, 22, -1, -1, -1, -1]
     },
     {
         "ID": 33,
         "Name": "FRONT HALL",
         "Exits": [true, true, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 34,
         "Name": "SITTING ROOM",
         "Exits": [true, false, true, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 35,
         "Name": "SECRET ROOM",
         "Exits": [false, false, true, false],
-        "Items": ["BOOK OF SPELLS"],
-        "Action": ""
+        "Items": [3, -1, -1, -1, -1]
     },
     {
         "ID": 36,
         "Name": "STEEP MARBLE STAIRS",
         "Exits": [false, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 37,
         "Name": "DINING ROOM",
         "Exits": [true, false, false, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 38,
         "Name": "COFFIN",
         "Exits": [true, false, false, false],
-        "Items": ["(RING)"],
-        "Action": ""
+        "Items": [2, -1, -1, -1, -1]
     },
     {
         "ID": 39,
         "Name": "CLIFF PATH",
         "Exits": [true, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 40,
         "Name": "CLOSET",
         "Exits": [true, true, false, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 41,
         "Name": "FRONT LOBBY",
         "Exits": [true, false, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 42,
         "Name": "LIBRARY",
         "Exits": [true, true, false, false],
-        "Items": ["CANDLESTICK"],
-        "Action": ""
+        "Items": [8, -1, -1, -1, -1]
     },
     {
         "ID": 43,
         "Name": "STUDY",
         "Exits": [false, false, false, true],
-        "Items": ["(CANDLE)", "DESK"],
-        "Action": "SWING AXE"
+        "Items": [17, 21, -1, -1, -1]
     },
     {
         "ID": 44,
         "Name": "COBWEBBY ROOM",
         "Exits": [true, true, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 45,
         "Name": "COLD CHAMBER",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 46,
         "Name": "SPOOKY ROOM",
         "Exits": [false, false, false, true],
-        "Items": ["PAINTING"],
-        "Action": ""
+        "Items": [1, -1, -1, -1, -1]
     },
     {
         "ID": 47,
         "Name": "CLIFF PATH BY MARSH",
         "Exits": [true, false, true, false],
-        "Items": ["BOAT"],
-        "Action": ""
+        "Items": [15, -1, -1, -1, -1]
     },
     {
         "ID": 48,
         "Name": "VERANDA",
         "Exits": [false, true, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 49,
         "Name": "FRONT PORCH",
         "Exits": [true, false, true, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 50,
         "Name": "FRONT TOWER",
         "Exits": [false, false, false, true],
-        "Items": ["GOBLET"],
-        "Action": ""
+        "Items": [14, -1, -1, -1, -1]
     },
     {
         "ID": 51,
         "Name": "SLOPING CORRIDOR",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 52,
         "Name": "UPPER GALLERY",
         "Exits": [true, false, false, true],
-        "Items": ["GHOSTS"],
-        "Action": "USE VACUUM"
+        "Items": [24, -1, -1, -1, -1]
     },
     {
         "ID": 53,
         "Name": "MARSH BY WALL",
         "Exits": [false, false, true, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 54,
         "Name": "MARSH",
         "Exits": [false, false, true, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 55,
         "Name": "SOGGY PATH",
         "Exits": [true, false, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 56,
         "Name": "TWISTED RAILINGS",
         "Exits": [true, true, false, false],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 57,
         "Name": "PATH",
         "Exits": [true, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 58,
         "Name": "PATH BY RAILINGS",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 59,
         "Name": "BENEATH TOWER",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 60,
         "Name": "DEBRIS",
         "Exits": [false, true, false, true],
-        "Items": ["AEROSOL CAN"],
-        "Action": ""
+        "Items": [16, -1, -1, -1, -1]
     },
     {
         "ID": 61,
         "Name": "FALLEN BRICKWORK",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 62,
         "Name": "STONE ARCH",
         "Exits": [false, true, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     },
     {
         "ID": 63,
         "Name": "CRUMBLING CLIFFTOP",
         "Exits": [false, false, false, true],
-        "Items": [],
-        "Action": ""
+        "Items": [-1, -1, -1, -1, -1]
     }
 ]

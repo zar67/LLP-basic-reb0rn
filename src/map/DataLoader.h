@@ -15,13 +15,7 @@ class DataLoader
   DataLoader() = default;
   ~DataLoader() = default;
 
-  void LoadRooms();
-  Room* room(int index);
-
- private:
-  Room Rooms[SETTINGS::ROOM_NUM];
-  std::string Objects[SETTINGS::OBJECT_NUM];
-  std::string Actions[SETTINGS::ACTION_NUM];
+  Room *LoadRooms();
 };
 
 #endif // PROJECT_DATALOADER_H

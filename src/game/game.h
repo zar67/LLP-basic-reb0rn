@@ -2,7 +2,8 @@
 #include <Engine/OGLGame.h>
 #include <string>
 
-#include "../map/DataLoader.h"
+#include "GameConstants.h"
+#include "../map/Room.h"
 
 /**
  *  An OpenGL Game based on ASGE.
@@ -26,5 +27,7 @@ class MyASGEGame : public ASGE::OGLGame
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
   bool in_menu = true;
 
-  DataLoader map_data;
+  void LoadRooms();
+
+  Room Rooms[DATA::ROOM_NUM];
 };

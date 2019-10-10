@@ -4,11 +4,16 @@
 
 #include "Room.h"
 
-void Room::setup(int id, std::string descriptor, bool n, bool e, bool s, bool w)
+void Room::setup(int id, std::string descriptor, bool n, bool e, bool s, bool w,  int room_objects[5])
 {
   ID = id;
   name = descriptor;
   directions.setup(n, e, s, w);
+
+  for (int i = 0; i < 5; i++)
+  {
+    items[i] = room_objects[i];
+  }
 }
 
 int Room::roomID()
@@ -24,4 +29,9 @@ std::string Room::roomName()
 Navigation Room::exits()
 {
   return directions;
+}
+
+int *Room::roomObjects()
+{
+    return items;
 }
