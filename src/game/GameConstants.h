@@ -9,10 +9,9 @@
 
 namespace DATA
 {
-    static const int ROOM_NUM = 64;
-    static const int OBJECT_NUM = 26;
-    static const int ACTION_NUM = 25;
+static const int ROOM_NUM = 64;
+static const int OBJECT_NUM = 26;
+static const int ACTION_NUM = 25;
 };
 
-
-#endif //PROJECT_GAMECONSTANTS_H
+#endif // PROJECT_GAMECONSTANTS_H

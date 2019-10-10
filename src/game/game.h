@@ -2,10 +2,10 @@
 #include <Engine/OGLGame.h>
 #include <string>
 
-#include "GameConstants.h"
-#include "../map/Room.h"
-#include "../map/Object.h"
 #include "../Action.h"
+#include "../map/Object.h"
+#include "../map/Room.h"
+#include "GameConstants.h"
 
 const int MENU_SCREEN = 0;
 const int GAME_SCREEN = 1;
@@ -48,5 +48,4 @@ class MyASGEGame : public ASGE::OGLGame
   int inventory[DATA::OBJECT_NUM];
   int current_room = 57;
   int score = 0;
-
 };

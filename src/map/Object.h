@@ -9,27 +9,27 @@
 
 class Object
 {
-public:
-    Object() = default;
-    ~Object() = default;
+ public:
+  Object() = default;
+  ~Object() = default;
 
-    void setup(int id, std::string descriptor, std::string examine, bool c, bool h);
+  void
+  setup(int id, std::string descriptor, std::string examine, bool c, bool h);
 
-    int objectID();
-    std::string objectName();
-    std::string examine();
-    bool collectible();
-    bool hidden();
+  int objectID();
+  std::string objectName();
+  std::string examine();
+  bool collectible();
+  bool hidden();
 
-    void hidden(bool h);
+  void hidden(bool h);
 
-private:
-    int ID;
-    std::string name;
-    std::string description;
-    bool can_pick_up;
-    bool hiding;
+ private:
+  int ID;
+  std::string name;
+  std::string description;
+  bool can_pick_up;
+  bool hiding;
 };
 
-
-#endif //PROJECT_OBJECT_H
+#endif // PROJECT_OBJECT_H
