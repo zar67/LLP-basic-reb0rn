@@ -24,13 +24,15 @@ void Input::LoadWords()
     {
       int id = action.value()["ID"];
       std::string verb = action.value()["Verb"];
+      int second_word = action.value()["Object"];
       int required_objects[3] = { action.value()["Required Objects"][0],
                                   action.value()["Required Objects"][1],
                                   action.value()["Required Objects"][2] };
       int required_room = action.value()["Required Room"];
       std::string response = action.value()["Response"];
 
-      actions[id].setup(id, verb, required_objects, required_room, response);
+      actions[id].setup(
+        id, verb, second_word, required_objects, required_room, response);
     }
 
     file.close();

@@ -15,12 +15,14 @@ class Action
 
   void setup(int id,
              std::string action,
+             int second_word,
              int required_objects[3],
              int required_room,
              std::string output);
 
   int actionID();
   std::string actionVerb();
+  int actionObject();
   int* objectsNeeded();
   int requiredRoom();
   std::string output();
@@ -28,6 +30,7 @@ class Action
  private:
   int ID;
   std::string verb;
+  int object;
   int objects_needed[3];
   int room;
   std::string response;

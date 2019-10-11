@@ -1,7 +1,3 @@
-#include <sstream>
-#include <string>
-#include <vector>
-
 #include <Engine/DebugPrinter.h>
 #include <Engine/FileIO.h>
 #include <Engine/Input.h>
@@ -12,6 +8,8 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <sstream>
+#include <string>
 
 #include "game.h"
 /**
@@ -226,9 +224,15 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
     if (key->key == ASGE::KEYS::KEY_ENTER &&
         key->action == ASGE::KEYS::KEY_RELEASED)
     {
+      std::istringstream iss(input_controller.input());
+      std::string action;
+      std::string object;
+      iss >> action;
+      iss >> object;
+
       for (int i = 0; i < DATA::ACTION_NUM; i++)
       {
-        if (input_controller.words(i)->actionVerb() == input_controller.input())
+        if (input_controller.words(i)->actionVerb() == action)
         {
           current_action = input_controller.words(i)->actionID();
           break;
@@ -238,6 +242,24 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
       if (current_action == -1)
       {
         action_response = "This is not a valid command.";
+      }
+      else
+      {
+        if (object == "")
+        {
+          current_action_object == -1;
+        }
+        else
+        {
+          for (int i = 0; i < DATA::OBJECT_NUM; i++)
+          {
+            if (objects[i].objectName() == object)
+            {
+              current_action_object = objects[i].objectID() - 1;
+              break;
+            }
+          }
+        }
       }
 
       input_controller.input("");
@@ -302,6 +324,138 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
     if (current_action != -1 && validateInput())
     {
       action_response = input_controller.words(current_action)->output();
+      switch (current_action)
+      {
+        case (1):
+        {
+            for (int i = 0; i < DATA::OBJECT_NUM; i++)
+            {
+                if (inventory[i] != 0)
+                {
+                    if (i % 7 == 0 && i != 0)
+                    {
+                        action_response += "\n";
+                    }
+                    else
+                    {
+                        action_response += objects[inventory[i]].objectName();
+                    }
+                }
+            }
+            break;
+        }
+        case (2):
+        {
+            if (rooms[current_room].exits().North())
+            {
+                current_room -= 8;
+            }
+            break;
+        }
+          case (3):
+          {
+              if (rooms[current_room].exits().East())
+              {
+                  current_room += 1;
+              }
+              break;
+          }
+          case (4):
+          {
+            if (rooms[current_room].exits().South())
+            {
+                current_room += 8;
+            }
+              break;
+          }
+          case (5):
+          {
+              if (rooms[current_room].exits().West())
+              {
+                  current_room -= 1;
+              }
+              break;
+          }
+          case (6):
+          {
+              break;
+          }
+          case (7):
+          {
+              break;
+          }
+          case (8):
+          {
+              break;
+          }
+          case (9):
+          {
+              break;
+          }
+          case (10):
+          {
+              break;
+          }
+          case (11):
+          {
+              break;
+          }
+          case (12):
+          {
+              break;
+          }
+          case (13):
+          {
+              break;
+          }
+          case (14):
+          {
+              break;
+          }
+          case (15):
+          {
+              break;
+          }
+          case (16):
+          {
+              break;
+          }
+          case (17):
+          {
+              break;
+          }
+          case (18):
+          {
+              break;
+          }
+          case (19):
+          {
+              break;
+          }
+          case (20):
+          {
+              break;
+          }
+          case (21):
+          {
+              break;
+          }
+          case (22):
+          {
+              break;
+          }
+          case (23):
+          {
+              break;
+          }
+          case (24):
+          {
+              break;
+          }
+      }
+
+      current_action = -1;
+      current_action_object = -1;
     }
   }
 }
@@ -353,21 +507,34 @@ void MyASGEGame::render(const ASGE::GameTime&)
     exits += rooms[current_room].exits().West() ? "W" : "";
 
     renderer->renderText("EXITS: " + exits, 10, 190, 2, ASGE::COLOURS::GRAY);
+
+    std::string items_text = "";
+    int* items = rooms[current_room].roomObjects();
+    for (int i = 0; i < 5; i++)
+    {
+      if (items[i] != -1)
+      {
+        items_text += objects[items[i] - 1].objectName();
+      }
+    }
+
+    renderer->renderText(
+      "ITEMS: " + items_text, 10, 230, 2, ASGE::COLOURS::GRAY);
     renderer->renderText("-----------------------------------------------",
                          0,
-                         220,
+                         250,
                          2,
                          ASGE::COLOURS::GRAY);
     renderer->renderText(
-      "WHAT WOULD YOU LIKE TO DO?", 10, 270, 2, ASGE::COLOURS::GRAY);
+      "WHAT WOULD YOU LIKE TO DO?", 10, 300, 2, ASGE::COLOURS::GRAY);
     renderer->renderText(
-      "> " + input_controller.input(), 15, 320, 2, ASGE::COLOURS::GRAY);
+      "> " + input_controller.input(), 15, 350, 2, ASGE::COLOURS::GRAY);
     renderer->renderText("-----------------------------------------------",
                          0,
-                         350,
+                         380,
                          2,
                          ASGE::COLOURS::GRAY);
-    renderer->renderText(action_response, 10, 400, 2, ASGE::COLOURS::GRAY);
+    renderer->renderText(action_response, 10, 430, 2, ASGE::COLOURS::GRAY);
   }
   else if (screen_open == GAME_OVER_SCREEN)
   {
@@ -404,8 +571,15 @@ bool MyASGEGame::CheckInventory(int ID)
 
 bool MyASGEGame::validateInput()
 {
+  // Check has two words if needed
+  if (input_controller.words(current_action)->actionObject() != -1 &&
+      current_action_object == -1)
+  {
+    action_response = "You need two words for this action";
+    return false;
+  }
   // Check have objects
-  if (input_controller.words(current_action)->objectsNeeded()[0] != -1)
+  else if (input_controller.words(current_action)->objectsNeeded()[0] != -1)
   {
     bool has_objects = true;
     for (int i = 0; i < 3; i++)
@@ -425,8 +599,9 @@ bool MyASGEGame::validateInput()
     }
   }
   // Check correct room
-  if (input_controller.words(current_action)->requiredRoom() != -1 &&
-      input_controller.words(current_action)->requiredRoom() != current_room)
+  else if (input_controller.words(current_action)->requiredRoom() != -1 &&
+           input_controller.words(current_action)->requiredRoom() !=
+             current_room)
   {
     action_response = "You can't do this here.";
     return false;
