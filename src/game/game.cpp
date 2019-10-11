@@ -34,14 +34,15 @@ MyASGEGame::~MyASGEGame()
     static_cast<unsigned int>(mouse_callback_id));
 }
 
-void MyASGEGame::Play()
+void MyASGEGame::play()
 {
-  LoadRooms();
-  LoadObjects();
+  loadRooms();
+  loadObjects();
 
   current_room = 57;
   score = 0;
   input_controller.input("");
+  num_objects_carrying = 0;
 
   for (int i = 0; i < DATA::OBJECT_NUM; i++)
   {
@@ -51,7 +52,7 @@ void MyASGEGame::Play()
   screen_open = GAME_SCREEN;
 }
 
-void MyASGEGame::LoadRooms()
+void MyASGEGame::loadRooms()
 {
   using File = ASGE::FILEIO::File;
   File file = File();
@@ -92,7 +93,7 @@ void MyASGEGame::LoadRooms()
   }
 }
 
-void MyASGEGame::LoadObjects()
+void MyASGEGame::loadObjects()
 {
   using File = ASGE::FILEIO::File;
   File file = File();
@@ -209,7 +210,7 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
     {
       if (menu_option == 0)
       {
-        Play();
+        play();
       }
       else
       {
@@ -247,7 +248,7 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
       {
         if (object == "")
         {
-          current_action_object == -1;
+          current_action_object = -1;
         }
         else
         {
@@ -274,7 +275,7 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
     {
       if (menu_option == 0)
       {
-        Play();
+        play();
       }
       else if (menu_option == 1)
       {
@@ -323,135 +324,108 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
   {
     if (current_action != -1 && validateInput())
     {
-      action_response = input_controller.words(current_action)->output();
+        action_response = input_controller.words(current_action)->output();
       switch (current_action)
       {
+        case (0):
+        {
+          showActions();
+          break;
+        }
         case (1):
         {
-            for (int i = 0; i < DATA::OBJECT_NUM; i++)
-            {
-                if (inventory[i] != 0)
-                {
-                    if (i % 7 == 0 && i != 0)
-                    {
-                        action_response += "\n";
-                    }
-                    else
-                    {
-                        action_response += objects[inventory[i]].objectName();
-                    }
-                }
-            }
-            break;
+          showInventory();
+          break;
         }
         case (2):
         {
-            if (rooms[current_room].exits().North())
-            {
-                current_room -= 8;
-            }
+          moveNorth();
+          break;
+        }
+        case (3):
+        {
+          moveEast();
+          break;
+        }
+        case (4):
+        {
+          moveSouth();
+          break;
+        }
+        case (5):
+        {
+          moveWest();
+          break;
+        }
+        case (6):
+        case (7):
+        {
+          addObjectToInventory();
+          break;
+        }
+        case (8):
+        {
+            examineObject();
             break;
         }
-          case (3):
-          {
-              if (rooms[current_room].exits().East())
-              {
-                  current_room += 1;
-              }
-              break;
-          }
-          case (4):
-          {
-            if (rooms[current_room].exits().South())
+        case (9):
+        {
+          removeObjectFromInventory();
+          break;
+        }
+        case (10):
+        {
+            showScore();
+            break;
+        }
+        case (11):
+        {
+            if (current_action_object+1 == 19)
             {
-                current_room += 8;
+                action_response = input_controller.words(11)->output();
+                // OPEN DOOR
             }
-              break;
-          }
-          case (5):
+            else if (current_action_object+1 == 20)
+            {
+                action_response = input_controller.words(12)->output();
+                revealCandle();
+            }
+        }
+        case (15):
+        {
+          break;
+        }
+        case (16):
+        {
+          break;
+        }
+        case (17):
+        {
+          break;
+        }
+        case (18):
+        {
+          if (current_action_object+1 == 18)
           {
-              if (rooms[current_room].exits().West())
-              {
-                  current_room -= 1;
-              }
-              break;
+              // CLIMB ROPE
           }
-          case (6):
-          {
-              break;
-          }
-          case (7):
-          {
-              break;
-          }
-          case (8):
-          {
-              break;
-          }
-          case (9):
-          {
-              break;
-          }
-          case (10):
-          {
-              break;
-          }
-          case (11):
-          {
-              break;
-          }
-          case (12):
-          {
-              break;
-          }
-          case (13):
-          {
-              break;
-          }
-          case (14):
-          {
-              break;
-          }
-          case (15):
-          {
-              break;
-          }
-          case (16):
-          {
-              break;
-          }
-          case (17):
-          {
-              break;
-          }
-          case (18):
-          {
-              break;
-          }
-          case (19):
-          {
-              break;
-          }
-          case (20):
-          {
-              break;
-          }
-          case (21):
-          {
-              break;
-          }
-          case (22):
-          {
-              break;
-          }
-          case (23):
-          {
-              break;
-          }
-          case (24):
-          {
-              break;
-          }
+        }
+        case (20):
+        {
+          break;
+        }
+        case (21):
+        {
+          break;
+        }
+        case (23):
+        {
+          break;
+        }
+        case (24):
+        {
+          break;
+        }
       }
 
       current_action = -1;
@@ -501,8 +475,8 @@ void MyASGEGame::render(const ASGE::GameTime&)
                          ASGE::COLOURS::GRAY);
 
     std::string exits = "";
-    exits += rooms[current_room].exits().North() ? "N," : "";
-    exits += rooms[current_room].exits().East() ? "E," : "";
+    exits += rooms[current_room].exits().North() ? "N, " : "";
+    exits += rooms[current_room].exits().East() ? "E, " : "";
     exits += rooms[current_room].exits().South() ? "S, " : "";
     exits += rooms[current_room].exits().West() ? "W" : "";
 
@@ -512,9 +486,9 @@ void MyASGEGame::render(const ASGE::GameTime&)
     int* items = rooms[current_room].roomObjects();
     for (int i = 0; i < 5; i++)
     {
-      if (items[i] != -1)
+      if (items[i] != -1 && !objects[items[i] - 1].hidden())
       {
-        items_text += objects[items[i] - 1].objectName();
+        items_text += objects[items[i] - 1].objectName() + ", ";
       }
     }
 
@@ -557,16 +531,28 @@ void MyASGEGame::render(const ASGE::GameTime&)
   }
 }
 
-bool MyASGEGame::CheckInventory(int ID)
+int MyASGEGame::checkInventory(int ID)
 {
   for (int i = 0; i < DATA::OBJECT_NUM; i++)
   {
     if (inventory[i] == ID)
     {
-      return true;
+      return i;
     }
   }
-  return false;
+  return -1;
+}
+
+int MyASGEGame::checkRoom(int ID)
+{
+  for (int i = 0; i < 5; i++)
+  {
+    if (rooms[current_room].roomObjects()[i] == current_action_object + 1)
+    {
+      return i;
+    }
+  }
+  return -1;
 }
 
 bool MyASGEGame::validateInput()
@@ -585,7 +571,7 @@ bool MyASGEGame::validateInput()
     for (int i = 0; i < 3; i++)
     {
       int obj = input_controller.words(current_action)->objectsNeeded()[i];
-      if (obj != -1 && !CheckInventory(obj))
+      if (obj != -1 && checkInventory(obj) != -1)
       {
         has_objects = false;
       }
@@ -609,3 +595,196 @@ bool MyASGEGame::validateInput()
 
   return true;
 }
+
+void MyASGEGame::showActions()
+{
+  for (int i = 0; i < DATA::ACTION_NUM; i++)
+  {
+    if (i % 7 == 0 && i != 0)
+    {
+      action_response += "\n";
+    }
+    else
+    {
+      action_response += input_controller.words(i)->actionVerb() + ", ";
+    }
+  }
+}
+
+void MyASGEGame::showInventory()
+{
+  for (int i = 0; i < DATA::OBJECT_NUM; i++)
+  {
+    if (inventory[i] != 0)
+    {
+      if (i % 7 == 0 && i != 0)
+      {
+        action_response += "\n";
+      }
+      else
+      {
+        action_response += objects[inventory[i]].objectName() + ", ";
+      }
+    }
+  }
+}
+
+void MyASGEGame::moveNorth()
+{
+  if (rooms[current_room].exits().North())
+  {
+    current_room -= 8;
+  }
+  else
+  {
+    action_response == "You can't go that way!";
+  }
+}
+
+void MyASGEGame::moveEast()
+{
+  if (rooms[current_room].exits().East())
+  {
+    current_room += 1;
+  }
+  else
+  {
+    action_response == "You can't go that way!";
+  }
+}
+
+void MyASGEGame::moveSouth()
+{
+  if (rooms[current_room].exits().South())
+  {
+    current_room += 8;
+  }
+  else
+  {
+    action_response == "You can't go that way!";
+  }
+}
+
+void MyASGEGame::moveWest()
+{
+  if (rooms[current_room].exits().West())
+  {
+    current_room -= 1;
+  }
+  else
+  {
+    action_response == "You can't go that way!";
+  }
+}
+
+void MyASGEGame::addObjectToInventory()
+{
+  int index = checkRoom(current_action_object);
+  if (index != -1 &&
+      objects[current_action_object].collectible() &&
+      !objects[current_action_object].hidden())
+  {
+    rooms[current_room].roomObjects()[index] = -1;
+    inventory[num_objects_carrying] = current_action_object;
+    num_objects_carrying += 1;
+    action_response =
+      "You picked up " + objects[current_action_object].objectName();
+  }
+  else if (!objects[current_action_object].collectible())
+  {
+    action_response =
+      "You cannot pickup " + objects[current_action_object].objectName();
+  }
+  else
+  {
+    action_response = "There is no " +
+                      objects[current_action_object].objectName() +
+                      " in this room";
+  }
+}
+
+void MyASGEGame::removeObjectFromInventory()
+{
+  bool space_in_room = false;
+  for (int i = 0; i < 5; i++)
+  {
+    if (rooms[current_room].roomObjects()[i] == -1)
+    {
+      space_in_room = true;
+      rooms[current_room].roomObjects()[i] = current_action_object + 1;
+      break;
+    }
+  }
+
+  if (space_in_room)
+  {
+    int index = checkInventory(current_action_object);
+    if (index != -1)
+    {
+      for (int i = index; i < num_objects_carrying; i++)
+      {
+        if (i == DATA::OBJECT_NUM - 1)
+        {
+          inventory[1] = -1;
+        }
+        else
+        {
+          inventory[i] = inventory[i + 1];
+        }
+      }
+
+      inventory[num_objects_carrying] = 0;
+      num_objects_carrying -= 1;
+      action_response =
+        "You dropped " + objects[current_action_object].objectName();
+    }
+    else
+    {
+      action_response =
+        "You aren't carrying " + objects[current_action_object].objectName();
+    }
+  }
+  else
+  {
+    action_response = "There is no space to put down\n" +
+                      objects[current_action_object].objectName() +
+                      " try a different room";
+  }
+}
+
+void MyASGEGame::examineObject()
+{
+  if (checkRoom(current_action_object) != -1 ||
+      checkInventory(current_action_object) != -1)
+  {
+      action_response = objects[current_action_object].examine();
+  }
+
+  if (current_action_object+1 == 22)
+  {
+      objects[17].hidden(false);
+      action_response += "\nA key is revealed!";
+  }
+  if (current_action_object+1 == 20)
+  {
+      action_response = objects[20].examine();
+      revealCandle();
+  }
+}
+
+void MyASGEGame::showScore()
+{
+    action_response = "Your score is: " + std::to_string(score);
+}
+
+void MyASGEGame::changeExits() {}
+
+void MyASGEGame::revealCandle()
+{
+    objects[16].hidden(false);
+    action_response += "\nA candle is revealed!";
+}
+
+void MyASGEGame::say() {}
+
+void MyASGEGame::removeEnemies() {}

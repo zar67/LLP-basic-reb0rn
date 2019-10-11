@@ -30,13 +30,29 @@ class MyASGEGame : public ASGE::OGLGame
   void update(const ASGE::GameTime&) override;
   void render(const ASGE::GameTime&) override;
 
-  void Play();
+  void play();
+  void loadRooms();
+  void loadObjects();
 
-  void LoadRooms();
-  void LoadObjects();
-
-  bool CheckInventory(int ID);
+  int checkInventory(int ID);
+  int checkRoom(int ID);
   bool validateInput();
+
+  void showActions();
+  void showInventory();
+  void moveNorth();
+  void moveEast();
+  void moveSouth();
+  void moveWest();
+  void addObjectToInventory();
+  void removeObjectFromInventory();
+  void examineObject();
+  void showScore();
+  void changeExits();
+  void revealCandle();
+  void say();
+  void removeEnemies();
+  // Light?
 
   int key_callback_id = -1;   /**< Key Input Callback ID. */
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
@@ -50,6 +66,7 @@ class MyASGEGame : public ASGE::OGLGame
   Object objects[DATA::OBJECT_NUM];
 
   int inventory[DATA::OBJECT_NUM];
+  int num_objects_carrying = 0;
   int current_room = 57;
   int current_action = -1;
   int current_action_object = -1;
