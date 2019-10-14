@@ -10,7 +10,7 @@ void Input::LoadWords()
   File file = File();
 
   // Open file
-  if (file.open("/data/actions.txt", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/actions.json", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;

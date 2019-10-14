@@ -36,22 +36,27 @@ class MyASGEGame : public ASGE::OGLGame
 
   int checkInventory(int ID);
   int checkRoom();
+  int checkRoom(int object);
   bool validateInput();
 
   void showActions();
   void showInventory();
+
   void moveNorth();
   void moveEast();
   void moveSouth();
   void moveWest();
+
   void addObjectToInventory();
   void removeObjectFromInventory();
+
   void examineObject();
   void showScore();
   void changeExits(int room, int dir);
   void revealCandle();
   void say();
-  void removeEnemies();
+  void removeBats();
+  void removeGhosts();
   // Light?
 
   int key_callback_id = -1;   /**< Key Input Callback ID. */
@@ -67,14 +72,16 @@ class MyASGEGame : public ASGE::OGLGame
 
   int inventory[DATA::OBJECT_NUM] = { 0 };
   int num_objects_carrying = 0;
+
   int current_room = 57;
   int current_action = -1;
   int current_action_object = -1;
+
   int score = 0;
 
   bool climbed_tree = false;
   bool axed_tree = false;
-  std::string say_value = "";
 
+  std::string say_value = "";
   std::string action_response = "";
 };

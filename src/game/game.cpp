@@ -59,7 +59,7 @@ void MyASGEGame::loadRooms()
   File file = File();
 
   // Open file
-  if (file.open("/data/rooms.txt", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/rooms.json", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
@@ -101,7 +101,7 @@ void MyASGEGame::loadObjects()
   File file = File();
 
   // Open file
-  if (file.open("/data/objects.txt", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/objects.json", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
@@ -472,10 +472,12 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
       }
       case (19):
       {
+        removeBats();
         break;
       }
       case (20):
       {
+        removeGhosts();
         break;
       }
       case (21):
@@ -614,6 +616,18 @@ int MyASGEGame::checkRoom()
   return -1;
 }
 
+int MyASGEGame::checkRoom(int object)
+{
+    for (int i = 0; i < 5; i++)
+  {
+    if (rooms[current_room].roomObjects()[i] == object)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
 bool MyASGEGame::validateInput()
 {
   // Check has two words if needed
@@ -638,7 +652,7 @@ bool MyASGEGame::validateInput()
     for (int i = 0; i < 3; i++)
     {
       int obj = input_controller.words(current_action)->objectsNeeded()[i];
-      if (obj != -1 && checkInventory(obj) != -1)
+      if (obj != -1 && checkInventory(obj-1) == -1)
       {
         has_objects = false;
       }
@@ -652,7 +666,7 @@ bool MyASGEGame::validateInput()
     }
   }
   // Check correct room
-  else if (input_controller.words(current_action)->requiredRoom() != -1 &&
+  if (input_controller.words(current_action)->requiredRoom() != -1 &&
            input_controller.words(current_action)->requiredRoom() !=
              current_room)
   {
@@ -896,4 +910,30 @@ void MyASGEGame::say()
   }
 }
 
-void MyASGEGame::removeEnemies() {}
+void MyASGEGame::removeBats()
+{
+  int index = checkRoom(23);
+
+  if (index != -1)
+  {
+    rooms[current_room].roomObjects()[index] = -1;
+  }
+  else
+  {
+    action_response = "There are no bats in this room...";
+  }
+}
+
+void MyASGEGame::removeGhosts()
+{
+  int index = checkRoom(24);
+
+  if (index != -1)
+  {
+    rooms[current_room].roomObjects()[index] = -1;
+  }
+  else
+  {
+    action_response = "There are no ghosts in this room...";
+  }
+}
