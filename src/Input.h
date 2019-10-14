@@ -26,7 +26,7 @@ class Input
 
   Action* words(int index);
   std::string input();
-  void input(std::string input);
+  void input(const std::string input);
 
  private:
   Action actions[DATA::ACTION_NUM];

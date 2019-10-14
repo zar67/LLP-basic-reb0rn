@@ -5,7 +5,7 @@
 #include "Room.h"
 
 void Room::setup(int id,
-                 std::string descriptor,
+                 const std::string descriptor,
                  bool north,
                  bool east,
                  bool south,

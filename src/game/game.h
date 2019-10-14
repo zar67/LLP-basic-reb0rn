@@ -35,7 +35,7 @@ class MyASGEGame : public ASGE::OGLGame
   void loadObjects();
 
   int checkInventory(int ID);
-  int checkRoom(int ID);
+  int checkRoom();
   bool validateInput();
 
   void showActions();
@@ -65,7 +65,7 @@ class MyASGEGame : public ASGE::OGLGame
   Room rooms[DATA::ROOM_NUM];
   Object objects[DATA::OBJECT_NUM];
 
-  int inventory[DATA::OBJECT_NUM];
+  int inventory[DATA::OBJECT_NUM] = { 0 };
   int num_objects_carrying = 0;
   int current_room = 57;
   int current_action = -1;

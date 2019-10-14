@@ -8,6 +8,9 @@
 class Navigation
 {
  public:
+  Navigation() = default;
+  ~Navigation() = default;
+
   void setup(bool n_exit, bool e_exit, bool s_exit, bool w_exit);
 
   bool North();
@@ -21,10 +24,10 @@ class Navigation
   void West(bool w_exit);
 
  private:
-  bool north;
-  bool east;
-  bool south;
-  bool west;
+  bool north = false;
+  bool east = false;
+  bool south = false;
+  bool west = false;
 };
 
 #endif // PROJECT_NAVIGATION_H

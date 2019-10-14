@@ -320,117 +320,120 @@ void MyASGEGame::clickHandler(ASGE::SharedEventData data)
  */
 void MyASGEGame::update(const ASGE::GameTime& game_time)
 {
-  if (screen_open == GAME_SCREEN)
+  if (screen_open == GAME_SCREEN && current_action != -1 && validateInput())
   {
-    if (current_action != -1 && validateInput())
+    action_response = input_controller.words(current_action)->output();
+    switch (current_action)
     {
-        action_response = input_controller.words(current_action)->output();
-      switch (current_action)
+      case (0):
       {
-        case (0):
-        {
-          showActions();
-          break;
-        }
-        case (1):
-        {
-          showInventory();
-          break;
-        }
-        case (2):
-        {
-          moveNorth();
-          break;
-        }
-        case (3):
-        {
-          moveEast();
-          break;
-        }
-        case (4):
-        {
-          moveSouth();
-          break;
-        }
-        case (5):
-        {
-          moveWest();
-          break;
-        }
-        case (6):
-        case (7):
-        {
-          addObjectToInventory();
-          break;
-        }
-        case (8):
-        {
-            examineObject();
-            break;
-        }
-        case (9):
-        {
-          removeObjectFromInventory();
-          break;
-        }
-        case (10):
-        {
-            showScore();
-            break;
-        }
-        case (11):
-        {
-            if (current_action_object+1 == 19)
-            {
-                action_response = input_controller.words(11)->output();
-                // OPEN DOOR
-            }
-            else if (current_action_object+1 == 20)
-            {
-                action_response = input_controller.words(12)->output();
-                revealCandle();
-            }
-        }
-        case (15):
-        {
-          break;
-        }
-        case (16):
-        {
-          break;
-        }
-        case (17):
-        {
-          break;
-        }
-        case (18):
-        {
-          if (current_action_object+1 == 18)
-          {
-              // CLIMB ROPE
-          }
-        }
-        case (20):
-        {
-          break;
-        }
-        case (21):
-        {
-          break;
-        }
-        case (23):
-        {
-          break;
-        }
-        case (24):
-        {
-          break;
-        }
+        showActions();
+        break;
       }
-
-      current_action = -1;
-      current_action_object = -1;
+      case (1):
+      {
+        showInventory();
+        break;
+      }
+      case (2):
+      {
+        moveNorth();
+        break;
+      }
+      case (3):
+      {
+        moveEast();
+        break;
+      }
+      case (4):
+      {
+        moveSouth();
+        break;
+      }
+      case (5):
+      {
+        moveWest();
+        break;
+      }
+      case (6):
+      case (7):
+      {
+        addObjectToInventory();
+        break;
+      }
+      case (8):
+      {
+        examineObject();
+        break;
+      }
+      case (9):
+      {
+        removeObjectFromInventory();
+        break;
+      }
+      case (10):
+      {
+        showScore();
+        break;
+      }
+      case (11):
+      {
+        if (current_action_object + 1 == 19)
+        {
+          action_response = input_controller.words(11)->output();
+          // OPEN DOOR
+        }
+        else if (current_action_object + 1 == 20)
+        {
+          action_response = input_controller.words(12)->output();
+          revealCandle();
+        }
+        break;
+      }
+      case (15):
+      {
+        break;
+      }
+      case (16):
+      {
+        break;
+      }
+      case (17):
+      {
+        break;
+      }
+      case (18):
+      {
+        if (current_action_object + 1 == 18)
+        {
+          // CLIMB ROPE
+        }
+        else if (current_action_object + 1 == 19)
+        {
+          // Climb Tree
+        }
+        break;
+      }
+      case (20):
+      {
+        break;
+      }
+      case (21):
+      {
+        break;
+      }
+      case (23):
+      {
+        break;
+      }
+      case (24):
+      {
+        break;
+      }
     }
+
+    current_action = -1;
+    current_action_object = -1;
   }
 }
 
@@ -543,7 +546,7 @@ int MyASGEGame::checkInventory(int ID)
   return -1;
 }
 
-int MyASGEGame::checkRoom(int ID)
+int MyASGEGame::checkRoom()
 {
   for (int i = 0; i < 5; i++)
   {
@@ -679,9 +682,8 @@ void MyASGEGame::moveWest()
 
 void MyASGEGame::addObjectToInventory()
 {
-  int index = checkRoom(current_action_object);
-  if (index != -1 &&
-      objects[current_action_object].collectible() &&
+  int index = checkRoom();
+  if (index != -1 && objects[current_action_object].collectible() &&
       !objects[current_action_object].hidden())
   {
     rooms[current_room].roomObjects()[index] = -1;
@@ -754,35 +756,34 @@ void MyASGEGame::removeObjectFromInventory()
 
 void MyASGEGame::examineObject()
 {
-  if (checkRoom(current_action_object) != -1 ||
-      checkInventory(current_action_object) != -1)
+  if (checkRoom() != -1 || checkInventory(current_action_object) != -1)
   {
-      action_response = objects[current_action_object].examine();
+    action_response = objects[current_action_object].examine();
   }
 
-  if (current_action_object+1 == 22)
+  if (current_action_object + 1 == 22)
   {
-      objects[17].hidden(false);
-      action_response += "\nA key is revealed!";
+    objects[17].hidden(false);
+    action_response += "\nA key is revealed!";
   }
-  if (current_action_object+1 == 20)
+  if (current_action_object + 1 == 20)
   {
-      action_response = objects[20].examine();
-      revealCandle();
+    action_response = objects[20].examine();
+    revealCandle();
   }
 }
 
 void MyASGEGame::showScore()
 {
-    action_response = "Your score is: " + std::to_string(score);
+  action_response = "Your score is: " + std::to_string(score);
 }
 
 void MyASGEGame::changeExits() {}
 
 void MyASGEGame::revealCandle()
 {
-    objects[16].hidden(false);
-    action_response += "\nA candle is revealed!";
+  objects[16].hidden(false);
+  action_response += "\nA candle is revealed!";
 }
 
 void MyASGEGame::say() {}
