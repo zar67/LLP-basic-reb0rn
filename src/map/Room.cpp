@@ -14,12 +14,56 @@ void Room::setup(int id,
 {
   ID = id;
   name = *descriptor;
-  directions.setup(north, east, south, west);
+  // directions.setup(north, east, south, west);
+  this->north = north;
+  this->east = east;
+  this->south = south;
+  this->west = west;
 
   for (int i = 0; i < 5; i++)
   {
     items[i] = room_objects[i];
   }
+}
+
+bool Room::North()
+{
+  return north;
+}
+
+bool Room::East()
+{
+  return east;
+}
+
+bool Room::South()
+{
+  return south;
+}
+
+bool Room::West()
+{
+  return west;
+}
+
+void Room::North(bool n_exit)
+{
+  north = n_exit;
+}
+
+void Room::East(bool e_exit)
+{
+  east = e_exit;
+}
+
+void Room::South(bool s_exit)
+{
+  south = s_exit;
+}
+
+void Room::West(bool w_exit)
+{
+  west = w_exit;
 }
 
 int Room::roomID()
@@ -32,10 +76,10 @@ std::string Room::roomName()
   return name;
 }
 
-Navigation Room::exits()
+/*Navigation Room::exits()
 {
   return directions;
-}
+}*/
 
 int* Room::roomObjects()
 {

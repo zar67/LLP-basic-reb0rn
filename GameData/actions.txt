@@ -133,7 +133,7 @@
 "Object": -1,
 "Required Objects": [12, -1, -1],
 "Required Room": 31,
-"Response": "The bars on the cellar window are loosened and you pull them away, \n You can now get in and out of the cellar from the cliff path"
+"Response": "The bars on the cellar window are loosened\nand you pull them away.\nYou can now get into the cellar."
 },
 {
 "ID": 17,
@@ -141,26 +141,18 @@
 "Object": 13,
 "Required Objects": [13, -1, -1],
 "Required Room": 43,
-"Response": "You swing you're axe into the wall and it breaks, revealing a secret room to the North"
+"Response": "You swing your axe."
 },
 {
 "ID": 18,
 "Verb": "CLIMB",
-"Object": 4,
-"Required Objects": [4, -1, -1],
-"Required Room": 7,
-"Response": "You fall out of the tree, OUCH!"
-},
-{
-"ID": 19,
-"Verb": "CLIMB",
 "Object": 26,
 "Required Objects": [-1, -1, -1],
 "Required Room": 7,
-"Response": "You fall out of the tree, OUCH!"
+"Response": "You can see thick forest and a \ncliff to the south."
 },
 {
-"ID": 20,
+"ID": 19,
 "Verb": "SPRAY",
 "Object": 16,
 "Required Objects": [16, -1, -1],
@@ -168,7 +160,7 @@
 "Response": "The bats flee"
 },
 {
-"ID": 21,
+"ID": 20,
 "Verb": "USE",
 "Object": 10,
 "Required Objects": [10, -1, -1],
@@ -176,7 +168,7 @@
 "Response": "All the ghosts are sucked up into the vacuum cleaner. HOORAY!"
 },
 {
-"ID": 22,
+"ID": 21,
 "Verb": "LIGHT",
 "Object": 17,
 "Required Objects": [8, 9, 17],
@@ -184,7 +176,7 @@
 "Response": "You light the candle"
 },
 {
-"ID": 23,
+"ID": 22,
 "Verb": "UNLIGHT",
 "Object": 17,
 "Required Objects": [17, -1, -1],

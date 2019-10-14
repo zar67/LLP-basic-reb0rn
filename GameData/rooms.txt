@@ -218,7 +218,7 @@
     {
         "ID": 36,
         "Name": "STEEP MARBLE STAIRS",
-        "Exits": [false, false, true, false],
+        "Exits": [true, false, true, false],
         "Items": [-1, -1, -1, -1, -1]
     },
     {
@@ -272,7 +272,7 @@
     {
         "ID": 45,
         "Name": "COLD CHAMBER",
-        "Exits": [false, true, false, true],
+        "Exits": [false, true, false, false],
         "Items": [-1, -1, -1, -1, -1]
     },
     {

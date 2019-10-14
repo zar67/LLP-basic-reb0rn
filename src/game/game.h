@@ -48,7 +48,7 @@ class MyASGEGame : public ASGE::OGLGame
   void removeObjectFromInventory();
   void examineObject();
   void showScore();
-  void changeExits();
+  void changeExits(int room, int dir);
   void revealCandle();
   void say();
   void removeEnemies();
@@ -71,6 +71,10 @@ class MyASGEGame : public ASGE::OGLGame
   int current_action = -1;
   int current_action_object = -1;
   int score = 0;
+
+  bool climbed_tree = false;
+  bool axed_tree = false;
+  std::string say_value = "";
 
   std::string action_response = "";
 };
