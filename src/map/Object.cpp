@@ -5,14 +5,14 @@
 #include "Object.h"
 
 void Object::setup(int id,
-                   const std::string descriptor,
-                   const std::string examine,
+                   const std::string* descriptor,
+                   const std::string* examine,
                    bool carry,
                    bool hide)
 {
   ID = id;
-  name = descriptor;
-  description = examine;
+  name = *descriptor;
+  description = *examine;
   can_pick_up = carry;
   hiding = hide;
 }

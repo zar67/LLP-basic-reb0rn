@@ -778,7 +778,10 @@ void MyASGEGame::showScore()
   action_response = "Your score is: " + std::to_string(score);
 }
 
-void MyASGEGame::changeExits() {}
+void MyASGEGame::changeExits()
+{
+
+}
 
 void MyASGEGame::revealCandle()
 {

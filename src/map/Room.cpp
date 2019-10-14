@@ -5,7 +5,7 @@
 #include "Room.h"
 
 void Room::setup(int id,
-                 const std::string descriptor,
+                 const std::string* descriptor,
                  bool north,
                  bool east,
                  bool south,
@@ -13,7 +13,7 @@ void Room::setup(int id,
                  int room_objects[5])
 {
   ID = id;
-  name = descriptor;
+  name = *descriptor;
   directions.setup(north, east, south, west);
 
   for (int i = 0; i < 5; i++)

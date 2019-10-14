@@ -14,8 +14,8 @@ class Object
   ~Object() = default;
 
   void setup(int id,
-             const std::string descriptor,
-             const std::string examine,
+             const std::string* descriptor,
+             const std::string* examine,
              bool carry,
              bool hide);
 

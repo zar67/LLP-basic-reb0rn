@@ -85,7 +85,7 @@ std::string Input::input()
   return current_input;
 }
 
-void Input::input(const std::string input)
+void Input::input(const std::string* input)
 {
-  current_input = input;
+  current_input = *input;
 }
