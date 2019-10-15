@@ -618,7 +618,7 @@ int MyASGEGame::checkRoom()
 
 int MyASGEGame::checkRoom(int object)
 {
-    for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 5; i++)
   {
     if (rooms[current_room].roomObjects()[i] == object)
     {
@@ -652,7 +652,7 @@ bool MyASGEGame::validateInput()
     for (int i = 0; i < 3; i++)
     {
       int obj = input_controller.words(current_action)->objectsNeeded()[i];
-      if (obj != -1 && checkInventory(obj-1) == -1)
+      if (obj != -1 && checkInventory(obj - 1) == -1)
       {
         has_objects = false;
       }
@@ -667,8 +667,7 @@ bool MyASGEGame::validateInput()
   }
   // Check correct room
   if (input_controller.words(current_action)->requiredRoom() != -1 &&
-           input_controller.words(current_action)->requiredRoom() !=
-             current_room)
+      input_controller.words(current_action)->requiredRoom() != current_room)
   {
     action_response = "You can't do this here.";
     return false;
