@@ -6,14 +6,14 @@
 
 void Action::setup(int id,
                    std::string action,
-                   int object_affected,
+                   int second_word,
                    int* required_objects,
                    int required_room,
                    std::string output)
 {
   ID = id;
   verb = action;
-  object = object_affected;
+  object = second_word;
 
   for (int i = 0; i < 3; i++)
   {

@@ -3,6 +3,7 @@
 #include <string>
 
 #include "../Action.h"
+#include "../Input.h"
 #include "../map/Object.h"
 #include "../map/Room.h"
 #include "GameConstants.h"
@@ -29,11 +30,34 @@ class MyASGEGame : public ASGE::OGLGame
   void update(const ASGE::GameTime&) override;
   void render(const ASGE::GameTime&) override;
 
-  void Play();
+  void play();
+  void loadRooms();
+  void loadObjects();
 
-  void LoadRooms();
-  void LoadObjects();
-  void LoadActions();
+  int checkInventory(int ID);
+  int checkRoom();
+  int checkRoom(int object);
+  bool validateInput();
+
+  void showActions();
+  void showInventory();
+
+  void moveNorth();
+  void moveEast();
+  void moveSouth();
+  void moveWest();
+
+  void addObjectToInventory();
+  void removeObjectFromInventory();
+
+  void examineObject();
+  void showScore();
+  void changeExits(int room, int dir);
+  void revealCandle();
+  void say();
+  void removeBats();
+  void removeGhosts();
+  void checkLight();
 
   int key_callback_id = -1;   /**< Key Input Callback ID. */
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
@@ -41,11 +65,25 @@ class MyASGEGame : public ASGE::OGLGame
   int screen_open = 0;
   int menu_option = 0;
 
+  Input input_controller = Input();
+
   Room rooms[DATA::ROOM_NUM];
   Object objects[DATA::OBJECT_NUM];
-  Action actions[DATA::ACTION_NUM];
 
-  int inventory[DATA::OBJECT_NUM];
+  int inventory[DATA::OBJECT_NUM] = { 0 };
+  int num_objects_carrying = 0;
+
   int current_room = 57;
+  int current_action = -1;
+  int current_action_object = -1;
+
   int score = 0;
+  int light_amount = 40;
+
+  bool climbed_tree = false;
+  bool axed_tree = false;
+  bool light_ignited = false;
+
+  std::string say_value = "";
+  std::string action_response = "";
 };

@@ -15,7 +15,7 @@ class Action
 
   void setup(int id,
              std::string action,
-             int object_affected,
+             int second_word,
              int required_objects[3],
              int required_room,
              std::string output);

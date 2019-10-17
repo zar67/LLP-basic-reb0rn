@@ -5,7 +5,6 @@
 #ifndef PROJECT_ROOM_H
 #define PROJECT_ROOM_H
 
-#include "Navigation.h"
 #include <string>
 
 class Room
@@ -15,24 +14,38 @@ class Room
   ~Room() = default;
 
   void setup(int id,
-             std::string descriptor,
+             const std::string* descriptor,
              bool north,
              bool east,
              bool south,
              bool west,
-             int room_objects[5]);
+             int room_objects[5],
+             bool dark);
 
   int roomID();
   std::string roomName();
-  Navigation exits();
+  bool needsLight();
+  bool North();
+  bool East();
+  bool South();
+  bool West();
+
+  void North(bool n_exit);
+  void East(bool e_exit);
+  void South(bool s_exit);
+  void West(bool w_exit);
 
   int* roomObjects();
 
  private:
-  int ID;
-  std::string name;
-  Navigation directions;
+  int ID = 0;
+  std::string name = "";
+  bool north = false;
+  bool east = false;
+  bool south = false;
+  bool west = false;
   int items[5];
+  bool dark;
 };
 
 #endif // PROJECT_ROOM_H
