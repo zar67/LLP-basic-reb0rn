@@ -15,11 +15,13 @@ void Input::LoadWords()
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
+    std::string raw_data = buffer.as_char();
+    file.close();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char());
+    auto file_data = nlohmann::json::parse(raw_data);
 
-    // Populate each room with it's information
+    // Populate each action with it's information
     for (const auto& action : file_data.items())
     {
       int id = action.value()["ID"];
@@ -35,7 +37,6 @@ void Input::LoadWords()
         id, verb, second_word, required_objects, required_room, response);
     }
 
-    file.close();
     std::cout << "Loaded Actions" << std::endl;
   }
   else

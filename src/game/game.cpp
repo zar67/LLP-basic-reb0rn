@@ -5,7 +5,6 @@
 #include <Engine/Keys.h>
 #include <Engine/Sprite.h>
 
-#include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <sstream>
@@ -65,9 +64,11 @@ void MyASGEGame::loadRooms()
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
+    std::string raw_data = buffer.as_char();
+    file.close();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char());
+    auto file_data = nlohmann::json::parse(raw_data);
 
     // Populate each room with it's information
     for (const auto& room : file_data.items())
@@ -88,7 +89,6 @@ void MyASGEGame::loadRooms()
       rooms[id].setup(id, &name, north, east, south, west, items, dark);
     }
 
-    file.close();
     std::cout << "Loaded Rooms" << std::endl;
   }
   else
@@ -108,11 +108,17 @@ void MyASGEGame::loadObjects()
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
+    std::string raw_data = buffer.as_char();
+    file.close();
+
+    // Format String
+    std::string data = raw_data.substr(0, raw_data.find("]"));
+    data += "]";
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char());
+    auto file_data = nlohmann::json::parse(data);
 
-    // Populate each room with it's information
+    // Populate each object with it's information
     for (const auto& object : file_data.items())
     {
       int id = object.value()["ID"];
@@ -124,7 +130,6 @@ void MyASGEGame::loadObjects()
       objects[id - 1].setup(id, &name, &description, carry, hide);
     }
 
-    file.close();
     std::cout << "Loaded Objects" << std::endl;
   }
   else
@@ -444,7 +449,8 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
             }
             else
             {
-              action_response = "You broke the thin wall.\nA secret room to the "
+              action_response = "You broke the thin wall.\nA secret room to "
+                                "the "
                                 "NORTH appears.";
               changeExits(43, 0);
             }
@@ -461,8 +467,8 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           {
             if (!climbed_tree)
             {
-              action_response = input_controller.words(
-                      current_action)->output();
+              action_response =
+                input_controller.words(current_action)->output();
               climbed_tree = true;
             }
             else
@@ -494,7 +500,8 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           }
           else
           {
-            action_response = "You're candle has burnt out, you can't light it again.";
+            action_response = "You're candle has burnt out, you can't light it "
+                              "again.";
           }
           break;
         }
@@ -728,7 +735,8 @@ void MyASGEGame::moveNorth()
 {
   if (rooms[current_room].North())
   {
-    if (!rooms[current_room - 8].needsLight() || (rooms[current_room - 8].needsLight() && light_ignited))
+    if (!rooms[current_room - 8].needsLight() ||
+        (rooms[current_room - 8].needsLight() && light_ignited))
     {
       current_room -= 8;
       action_response = "You move NORTH";
@@ -749,7 +757,8 @@ void MyASGEGame::moveEast()
 {
   if (rooms[current_room].East())
   {
-    if (!rooms[current_room + 1].needsLight() || (rooms[current_room + 1].needsLight() && light_ignited))
+    if (!rooms[current_room + 1].needsLight() ||
+        (rooms[current_room + 1].needsLight() && light_ignited))
     {
       current_room += 1;
       action_response = "You move EAST";
@@ -770,15 +779,16 @@ void MyASGEGame::moveSouth()
 {
   if (rooms[current_room].South())
   {
-    if (!rooms[current_room + 8].needsLight() || (rooms[current_room + 8].needsLight() && light_ignited))
+    if (!rooms[current_room + 8].needsLight() ||
+        (rooms[current_room + 8].needsLight() && light_ignited))
     {
       current_room += 8;
       action_response = "You move SOUTH";
       checkLight();
     }
-      else
+    else
     {
-        action_response = "You need a light to go SOUTH";
+      action_response = "You need a light to go SOUTH";
     }
   }
   else
@@ -791,7 +801,8 @@ void MyASGEGame::moveWest()
 {
   if (rooms[current_room].West())
   {
-    if (!rooms[current_room - 1].needsLight() || (rooms[current_room - 1].needsLight() && light_ignited))
+    if (!rooms[current_room - 1].needsLight() ||
+        (rooms[current_room - 1].needsLight() && light_ignited))
     {
       current_room -= 1;
       action_response = "You move WEST";
@@ -960,33 +971,35 @@ bool MyASGEGame::checkFrozen()
 {
   if (current_room == 13 && checkRoom(23) != -1)
   {
-      action_response = "The bats frighten you,\nyou're too scared to do anything but run!";
-      if (current_action == 5)
-      {
-          moveWest();
-          action_response = "You flee.";
-      }
-      else if (current_action == 19)
-      {
-          removeBats();
-          action_response = "You vanquish the bats!";
-      }
-      return true;
+    action_response = "The bats frighten you,\nyou're too scared to do "
+                      "anything but run!";
+    if (current_action == 5)
+    {
+      moveWest();
+      action_response = "You flee.";
+    }
+    else if (current_action == 19)
+    {
+      removeBats();
+      action_response = "You vanquish the bats!";
+    }
+    return true;
   }
   if (current_room == 52 && checkRoom(24) != -1)
   {
-      action_response = "The ghosts frighten you,\nyou're too scared to do anything but run!";
-      if (current_action == 2)
-      {
-          moveNorth();
-          action_response = "You flee.";
-      }
-      else if (current_action == 20)
-      {
-          removeGhosts();
-          action_response = "You vanquish the ghosts!";
-      }
-      return true;
+    action_response = "The ghosts frighten you,\nyou're too scared to do "
+                      "anything but run!";
+    if (current_action == 2)
+    {
+      moveNorth();
+      action_response = "You flee.";
+    }
+    else if (current_action == 20)
+    {
+      removeGhosts();
+      action_response = "You vanquish the ghosts!";
+    }
+    return true;
   }
   return false;
 }
