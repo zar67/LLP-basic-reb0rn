@@ -10,14 +10,14 @@ void Input::LoadWords()
   File file = File();
 
   // Open file
-  if (file.open("/data/actions.json", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/actions.txt", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_unsigned_char());
+    auto file_data = nlohmann::json::parse(buffer.as_char());
 
     // Populate each room with it's information
     for (const auto& action : file_data.items())

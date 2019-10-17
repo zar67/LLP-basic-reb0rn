@@ -60,14 +60,14 @@ void MyASGEGame::loadRooms()
   File file = File();
 
   // Open file
-  if (file.open("/data/rooms.json", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/rooms.txt", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_unsigned_char());
+    auto file_data = nlohmann::json::parse(buffer.as_char());
 
     // Populate each room with it's information
     for (const auto& room : file_data.items())
@@ -103,14 +103,14 @@ void MyASGEGame::loadObjects()
   File file = File();
 
   // Open file
-  if (file.open("/data/objects.json", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/objects.txt", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_unsigned_char());
+    auto file_data = nlohmann::json::parse(buffer.as_char());
 
     // Populate each room with it's information
     for (const auto& object : file_data.items())
@@ -334,173 +334,177 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
   if (screen_open == GAME_SCREEN && current_action != -1 && validateInput())
   {
     action_response = input_controller.words(current_action)->output();
-    switch (current_action)
+
+    if (!checkFrozen())
     {
-      case (0):
+      switch (current_action)
       {
-        showActions();
-        break;
-      }
-      case (1):
-      {
-        showInventory();
-        break;
-      }
-      case (2):
-      {
-        moveNorth();
-        break;
-      }
-      case (3):
-      {
-        moveEast();
-        break;
-      }
-      case (4):
-      {
-        moveSouth();
-        break;
-      }
-      case (5):
-      {
-        moveWest();
-        break;
-      }
-      case (6):
-      case (7):
-      {
-        addObjectToInventory();
-        break;
-      }
-      case (8):
-      {
-        examineObject();
-        break;
-      }
-      case (9):
-      {
-        removeObjectFromInventory();
-        break;
-      }
-      case (10):
-      {
-        showScore();
-        break;
-      }
-      case (11):
-      {
-        if (current_action_object + 1 == 19)
+        case (0):
         {
-          if (rooms[28].South())
+          showActions();
+          break;
+        }
+        case (1):
+        {
+          showInventory();
+          break;
+        }
+        case (2):
+        {
+          moveNorth();
+          break;
+        }
+        case (3):
+        {
+          moveEast();
+          break;
+        }
+        case (4):
+        {
+          moveSouth();
+          break;
+        }
+        case (5):
+        {
+          moveWest();
+          break;
+        }
+        case (6):
+        case (7):
+        {
+          addObjectToInventory();
+          break;
+        }
+        case (8):
+        {
+          examineObject();
+          break;
+        }
+        case (9):
+        {
+          removeObjectFromInventory();
+          break;
+        }
+        case (10):
+        {
+          showScore();
+          break;
+        }
+        case (11):
+        {
+          if (current_action_object + 1 == 19)
+          {
+            if (rooms[28].South())
+            {
+              action_response = "You've already done this action.";
+            }
+            else
+            {
+              action_response = input_controller.words(11)->output();
+              changeExits(28, 2);
+            }
+          }
+          else if (current_action_object + 1 == 20)
+          {
+            action_response = input_controller.words(12)->output();
+            revealCandle();
+          }
+          break;
+        }
+        case (15):
+        {
+          say();
+          break;
+        }
+        case (16):
+        {
+          if (rooms[31].West())
           {
             action_response = "You've already done this action.";
           }
           else
           {
-            action_response = input_controller.words(11)->output();
-            changeExits(28, 2);
+            changeExits(31, 3);
+            changeExits(30, 1);
           }
+          break;
         }
-        else if (current_action_object + 1 == 20)
+        case (17):
         {
-          action_response = input_controller.words(12)->output();
-          revealCandle();
-        }
-        break;
-      }
-      case (15):
-      {
-        say();
-        break;
-      }
-      case (16):
-      {
-        if (rooms[31].West())
-        {
-          action_response = "You've already done this action.";
-        }
-        else
-        {
-          changeExits(31, 3);
-          changeExits(30, 1);
-        }
-        break;
-      }
-      case (17):
-      {
-        if (current_room == 7)
-        {
-          action_response = "TIMBERRRRR!";
-          axed_tree = true;
-        }
-        else if (current_room == 43)
-        {
-          if (rooms[43].North())
+          if (current_room == 7)
           {
-            action_response = "You've already done this action.";
+            action_response = "TIMBERRRRR!";
+            axed_tree = true;
+          }
+          else if (current_room == 43)
+          {
+            if (rooms[43].North())
+            {
+              action_response = "You've already done this action.";
+            }
+            else
+            {
+              action_response = "You broke the thin wall.\nA secret room to the "
+                                "NORTH appears.";
+              changeExits(43, 0);
+            }
           }
           else
-          {
-            action_response = "You broke the thin wall.\nA secret room to the "
-                              "NORTH appears.";
-            changeExits(43, 0);
-          }
-        }
-        else
-        {
-          action_response = input_controller.words(current_action)->output();
-        }
-        break;
-      }
-      case (18):
-      {
-        if (!axed_tree)
-        {
-          if (!climbed_tree)
           {
             action_response = input_controller.words(current_action)->output();
-            climbed_tree = true;
+          }
+          break;
+        }
+        case (18):
+        {
+          if (!axed_tree)
+          {
+            if (!climbed_tree)
+            {
+              action_response = input_controller.words(
+                      current_action)->output();
+              climbed_tree = true;
+            }
+            else
+            {
+              action_response = "You climb down the tree.";
+            }
           }
           else
           {
-            action_response = "You climb down the tree.";
+            action_response = "You cut the tree down, you can't climb it now.";
           }
+          break;
         }
-        else
+        case (19):
         {
-          action_response = "You cut the tree down, you can't climb it now.";
+          removeBats();
+          break;
         }
-        break;
-      }
-      case (19):
-      {
-        removeBats();
-        break;
-      }
-      case (20):
-      {
-        removeGhosts();
-        break;
-      }
-      case (21):
-      {
-        if (light_amount > 0)
+        case (20):
         {
-          light_ignited = true;
+          removeGhosts();
+          break;
         }
-        else
+        case (21):
         {
-          action_response = "You're candle has burnt out, you can't light it again.";
+          if (light_amount > 0)
+          {
+            light_ignited = true;
+          }
+          else
+          {
+            action_response = "You're candle has burnt out, you can't light it again.";
+          }
+          break;
         }
-        break;
-      }
-      case (22):
-      {
-        light_ignited = false;
-        break;
+        case (22):
+        {
+          light_ignited = false;
+          break;
+        }
       }
     }
-
     current_action = -1;
     current_action_object = -1;
   }
@@ -727,8 +731,8 @@ void MyASGEGame::moveNorth()
     if (!rooms[current_room - 8].needsLight() || (rooms[current_room - 8].needsLight() && light_ignited))
     {
       current_room -= 8;
+      action_response = "You move NORTH";
       checkLight();
-      action_response = "You moved NORTH";
     }
     else
     {
@@ -748,8 +752,8 @@ void MyASGEGame::moveEast()
     if (!rooms[current_room + 1].needsLight() || (rooms[current_room + 1].needsLight() && light_ignited))
     {
       current_room += 1;
+      action_response = "You move EAST";
       checkLight();
-      action_response = "You moves EAST";
     }
     else
     {
@@ -769,8 +773,8 @@ void MyASGEGame::moveSouth()
     if (!rooms[current_room + 8].needsLight() || (rooms[current_room + 8].needsLight() && light_ignited))
     {
       current_room += 8;
+      action_response = "You move SOUTH";
       checkLight();
-      action_response = "You moved SOUTH";
     }
       else
     {
@@ -790,8 +794,8 @@ void MyASGEGame::moveWest()
     if (!rooms[current_room - 1].needsLight() || (rooms[current_room - 1].needsLight() && light_ignited))
     {
       current_room -= 1;
+      action_response = "You move WEST";
       checkLight();
-      action_response = "You moved WEST";
     }
     else
     {
@@ -952,6 +956,41 @@ void MyASGEGame::say()
   }
 }
 
+bool MyASGEGame::checkFrozen()
+{
+  if (current_room == 13 && checkRoom(23) != -1)
+  {
+      action_response = "The bats frighten you,\nyou're too scared to do anything but run!";
+      if (current_action == 5)
+      {
+          moveWest();
+          action_response = "You flee.";
+      }
+      else if (current_action == 19)
+      {
+          removeBats();
+          action_response = "You vanquish the bats!";
+      }
+      return true;
+  }
+  if (current_room == 52 && checkRoom(24) != -1)
+  {
+      action_response = "The ghosts frighten you,\nyou're too scared to do anything but run!";
+      if (current_action == 2)
+      {
+          moveNorth();
+          action_response = "You flee.";
+      }
+      else if (current_action == 20)
+      {
+          removeGhosts();
+          action_response = "You vanquish the ghosts!";
+      }
+      return true;
+  }
+  return false;
+}
+
 void MyASGEGame::removeBats()
 {
   int index = checkRoom(23);
@@ -986,7 +1025,7 @@ void MyASGEGame::checkLight()
   {
     light_amount -= 1;
 
-    if (light_amount < 10)
+    if (light_amount == 10)
     {
       action_response = "Your light is beginning to flicker out...";
     }

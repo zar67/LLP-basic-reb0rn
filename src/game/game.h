@@ -55,6 +55,7 @@ class MyASGEGame : public ASGE::OGLGame
   void changeExits(int room, int dir);
   void revealCandle();
   void say();
+  bool checkFrozen();
   void removeBats();
   void removeGhosts();
   void checkLight();

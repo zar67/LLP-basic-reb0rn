@@ -181,4 +181,5 @@
 		"Object": 17,
 		"Required Objects": [17, -1, -1],
 		"Required Room": -1,
-		"Response": "You extinguish the candle"}]
+		"Response": "You extinguish the candle"
+	}]
