@@ -41,6 +41,7 @@ void MyASGEGame::play()
 
   current_room = 57;
   score = 0;
+  light_amount = 40;
   std::string empty_input = "";
   input_controller.input(&empty_input);
   num_objects_carrying = 0;
@@ -82,8 +83,9 @@ void MyASGEGame::loadRooms()
                        room.value()["Items"][2],
                        room.value()["Items"][3],
                        room.value()["Items"][4] };
+      bool dark = room.value()["Dark"];
 
-      rooms[id].setup(id, &name, north, east, south, west, items);
+      rooms[id].setup(id, &name, north, east, south, west, items, dark);
     }
 
     file.close();
@@ -482,10 +484,19 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
       }
       case (21):
       {
+        if (light_amount > 0)
+        {
+          light_ignited = true;
+        }
+        else
+        {
+          action_response = "You're candle has burnt out, you can't light it again.";
+        }
         break;
       }
       case (22):
       {
+        light_ignited = false;
         break;
       }
     }
@@ -634,7 +645,7 @@ bool MyASGEGame::validateInput()
   if (input_controller.words(current_action)->actionObject() != -1 &&
       current_action_object == -1)
   {
-    action_response = "You need two words for this action";
+    action_response = "You need to say a valid object with\nthis action.";
     return false;
   }
   // Check correct object
@@ -713,8 +724,16 @@ void MyASGEGame::moveNorth()
 {
   if (rooms[current_room].North())
   {
-    current_room -= 8;
-    action_response = "You moved NORTH";
+    if (!rooms[current_room - 8].needsLight() || (rooms[current_room - 8].needsLight() && light_ignited))
+    {
+      current_room -= 8;
+      checkLight();
+      action_response = "You moved NORTH";
+    }
+    else
+    {
+      action_response = "You need a light to go NORTH";
+    }
   }
   else
   {
@@ -726,8 +745,16 @@ void MyASGEGame::moveEast()
 {
   if (rooms[current_room].East())
   {
-    current_room += 1;
-    action_response = "You moves EAST";
+    if (!rooms[current_room + 1].needsLight() || (rooms[current_room + 1].needsLight() && light_ignited))
+    {
+      current_room += 1;
+      checkLight();
+      action_response = "You moves EAST";
+    }
+    else
+    {
+      action_response = "You need a light to go EAST";
+    }
   }
   else
   {
@@ -739,8 +766,16 @@ void MyASGEGame::moveSouth()
 {
   if (rooms[current_room].South())
   {
-    current_room += 8;
-    action_response = "You moved SOUTH";
+    if (!rooms[current_room + 8].needsLight() || (rooms[current_room + 8].needsLight() && light_ignited))
+    {
+      current_room += 8;
+      checkLight();
+      action_response = "You moved SOUTH";
+    }
+      else
+    {
+        action_response = "You need a light to go SOUTH";
+    }
   }
   else
   {
@@ -752,8 +787,16 @@ void MyASGEGame::moveWest()
 {
   if (rooms[current_room].West())
   {
-    current_room -= 1;
-    action_response = "You moved WEST";
+    if (!rooms[current_room - 1].needsLight() || (rooms[current_room - 1].needsLight() && light_ignited))
+    {
+      current_room -= 1;
+      checkLight();
+      action_response = "You moved WEST";
+    }
+    else
+    {
+      action_response = "You need a light to go WEST";
+    }
   }
   else
   {
@@ -934,5 +977,23 @@ void MyASGEGame::removeGhosts()
   else
   {
     action_response = "There are no ghosts in this room...";
+  }
+}
+
+void MyASGEGame::checkLight()
+{
+  if (light_ignited)
+  {
+    light_amount -= 1;
+
+    if (light_amount < 10)
+    {
+      action_response = "Your light is beginning to flicker out...";
+    }
+    else if (light_amount <= 0)
+    {
+      light_ignited = false;
+      action_response = "Your light went out!";
+    }
   }
 }

@@ -57,7 +57,7 @@ class MyASGEGame : public ASGE::OGLGame
   void say();
   void removeBats();
   void removeGhosts();
-  // Light?
+  void checkLight();
 
   int key_callback_id = -1;   /**< Key Input Callback ID. */
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
@@ -78,9 +78,11 @@ class MyASGEGame : public ASGE::OGLGame
   int current_action_object = -1;
 
   int score = 0;
+  int light_amount = 40;
 
   bool climbed_tree = false;
   bool axed_tree = false;
+  bool light_ignited = false;
 
   std::string say_value = "";
   std::string action_response = "";

@@ -19,10 +19,12 @@ class Room
              bool east,
              bool south,
              bool west,
-             int room_objects[5]);
+             int room_objects[5],
+             bool dark);
 
   int roomID();
   std::string roomName();
+  bool needsLight();
   bool North();
   bool East();
   bool South();
@@ -43,6 +45,7 @@ class Room
   bool south = false;
   bool west = false;
   int items[5];
+  bool dark;
 };
 
 #endif // PROJECT_ROOM_H

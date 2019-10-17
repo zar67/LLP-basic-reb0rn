@@ -10,7 +10,8 @@ void Room::setup(int id,
                  bool east,
                  bool south,
                  bool west,
-                 int room_objects[5])
+                 int room_objects[5],
+                 bool dark)
 {
   ID = id;
   name = *descriptor;
@@ -19,6 +20,7 @@ void Room::setup(int id,
   this->east = east;
   this->south = south;
   this->west = west;
+  this->dark = dark;
 
   for (int i = 0; i < 5; i++)
   {
@@ -76,10 +78,10 @@ std::string Room::roomName()
   return name;
 }
 
-/*Navigation Room::exits()
+bool Room::needsLight()
 {
-  return directions;
-}*/
+  return dark;
+}
 
 int* Room::roomObjects()
 {
