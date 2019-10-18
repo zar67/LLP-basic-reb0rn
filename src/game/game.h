@@ -49,7 +49,7 @@ class MyASGEGame : public ASGE::OGLGame
 
   void examineObject();
   void showScore();
-  void changeExits(int room, int dir);
+  void changeExits(int room, int dir, bool value);
   void revealCandle();
   void say();
   bool checkFrozen();

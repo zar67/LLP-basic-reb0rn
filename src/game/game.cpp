@@ -430,6 +430,12 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
         case (7):
         {
           addObjectToInventory();
+
+          if (current_action_object + 1 == 15 && current_room == 47)
+          {
+            changeExits(47, 0, false);
+            changeExits(47, 2, true);
+          }
           break;
         }
         case (8):
@@ -456,7 +462,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           else
           {
             action_response = actions[11].output();
-            changeExits(28, 2);
+            changeExits(28, 2, true);
           }
           break;
         }
@@ -486,8 +492,8 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           }
           else
           {
-            changeExits(31, 3);
-            changeExits(30, 1);
+            changeExits(31, 3, true);
+            changeExits(30, 1, true);
           }
           break;
         }
@@ -509,7 +515,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
               action_response = "You broke the thin wall.\nA secret room to "
                                 "the "
                                 "NORTH appears.";
-              changeExits(43, 0);
+              changeExits(43, 0, true);
             }
           }
           else
@@ -918,12 +924,13 @@ void MyASGEGame::addObjectToInventory()
 void MyASGEGame::removeObjectFromInventory()
 {
   bool space_in_room = false;
+  int inventory_index = 0;
   for (int i = 0; i < 5; i++)
   {
     if (rooms[current_room].roomObjects()[i] == -1)
     {
       space_in_room = true;
-      rooms[current_room].roomObjects()[i] = current_action_object + 1;
+      inventory_index = i;
       break;
     }
   }
@@ -933,6 +940,8 @@ void MyASGEGame::removeObjectFromInventory()
     int index = checkInventory(current_action_object);
     if (index != -1)
     {
+      rooms[current_room].roomObjects()[inventory_index] =
+        current_action_object + 1;
       for (int i = index; i < num_objects_carrying; i++)
       {
         if (i == DATA::OBJECT_NUM - 1)
@@ -993,21 +1002,21 @@ void MyASGEGame::showScore()
   action_response = "Your score is: " + std::to_string(score);
 }
 
-void MyASGEGame::changeExits(int room, int dir)
+void MyASGEGame::changeExits(int room, int dir, bool value)
 {
   switch (dir)
   {
     case 0:
-      rooms[room].North(true);
+      rooms[room].North(value);
       break;
     case 1:
-      rooms[room].East(true);
+      rooms[room].East(value);
       break;
     case 2:
-      rooms[room].South(true);
+      rooms[room].South(value);
       break;
     case 3:
-      rooms[room].West(true);
+      rooms[room].West(value);
       break;
   }
 }
@@ -1028,7 +1037,7 @@ void MyASGEGame::say()
     if (current_room == 45)
     {
       action_response += "\nThe magical barrier falls";
-      changeExits(45, 3);
+      changeExits(45, 3, true);
     }
     else
     {
@@ -1068,6 +1077,19 @@ bool MyASGEGame::checkFrozen()
     {
       removeGhosts();
       action_response = "You vanquish the ghosts!";
+    }
+    return true;
+  }
+
+  if ((current_room == 61 || current_room == 62) && checkInventory(14) != -1)
+  {
+    action_response = "The boat get's stuck,\nyou have to leave it behind.";
+    if (current_action == 9 && current_action_object + 1 == 15)
+    {
+      removeObjectFromInventory();
+      action_response = "You get out of the boat.";
+      changeExits(47, 0, true);
+      changeExits(47, 2, false);
     }
     return true;
   }
