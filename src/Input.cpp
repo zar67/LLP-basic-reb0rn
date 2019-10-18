@@ -4,47 +4,6 @@
 
 #include "Input.h"
 
-void Input::LoadWords()
-{
-  using File = ASGE::FILEIO::File;
-  File file = File();
-
-  // Open file
-  if (file.open("/data/actions.txt", ASGE::FILEIO::File::IOMode::READ))
-  {
-    // Get file data
-    using Buffer = ASGE::FILEIO::IOBuffer;
-    Buffer buffer = file.read();
-    std::string raw_data = buffer.as_char();
-    file.close();
-
-    // Read file data as JSON
-    auto file_data = nlohmann::json::parse(raw_data);
-
-    // Populate each action with it's information
-    for (const auto& action : file_data.items())
-    {
-      int id = action.value()["ID"];
-      std::string verb = action.value()["Verb"];
-      int second_word = action.value()["Object"];
-      int required_objects[3] = { action.value()["Required Objects"][0],
-                                  action.value()["Required Objects"][1],
-                                  action.value()["Required Objects"][2] };
-      int required_room = action.value()["Required Room"];
-      std::string response = action.value()["Response"];
-
-      actions[id].setup(
-        id, verb, second_word, required_objects, required_room, response);
-    }
-
-    std::cout << "Loaded Actions" << std::endl;
-  }
-  else
-  {
-    std::cout << "Actions file not found" << std::endl;
-  }
-}
-
 void Input::update(int key, int action)
 {
   if (((key >= 65 && key <= 90) || key == ASGE::KEYS::KEY_SPACE) &&
@@ -75,11 +34,6 @@ int Input::menuOption(int key, int action, int* menu_option, int num_options)
     *menu_option += 1;
     *menu_option %= num_options;
   }
-}
-
-Action* Input::words(int index)
-{
-  return &actions[index];
 }
 
 std::string Input::input()

@@ -8,10 +8,6 @@
 #include "../map/Room.h"
 #include "GameConstants.h"
 
-const int MENU_SCREEN = 0;
-const int GAME_SCREEN = 1;
-const int GAME_OVER_SCREEN = 2;
-
 /**
  *  An OpenGL Game based on ASGE.
  */
@@ -31,6 +27,7 @@ class MyASGEGame : public ASGE::OGLGame
   void render(const ASGE::GameTime&) override;
 
   void play();
+  void loadWords();
   void loadRooms();
   void loadObjects();
 
@@ -68,6 +65,7 @@ class MyASGEGame : public ASGE::OGLGame
 
   Input input_controller = Input();
 
+  Action actions[DATA::ACTION_NUM];
   Room rooms[DATA::ROOM_NUM];
   Object objects[DATA::OBJECT_NUM];
 
@@ -81,6 +79,11 @@ class MyASGEGame : public ASGE::OGLGame
   int score = 0;
   int light_amount = 40;
 
+  int say_random_rooms[DATA::SAY_RANDOM_ROOM_NUM] = {
+    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 14,
+    15, 16, 17, 23, 24, 25, 31, 32, 33, 34, 39, 40, 41,
+    42, 43, 47, 48, 49, 56, 57, 58, 59, 60, 61, 62, 63
+  };
   bool climbed_tree = false;
   bool axed_tree = false;
   bool light_ignited = false;

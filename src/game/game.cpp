@@ -9,6 +9,7 @@
 #include <nlohmann/json.hpp>
 #include <sstream>
 #include <string>
+#include <time.h>
 
 #include "game.h"
 /**
@@ -18,6 +19,7 @@
  */
 MyASGEGame::MyASGEGame()
 {
+  srand(time(NULL));
   game_name = "Haunted House Adventure";
 }
 
@@ -50,7 +52,52 @@ void MyASGEGame::play()
     inventory[i] = 0;
   }
 
-  screen_open = GAME_SCREEN;
+  screen_open = DATA::GAME_SCREEN;
+}
+
+void MyASGEGame::loadWords()
+{
+  using File = ASGE::FILEIO::File;
+  File file = File();
+
+  // Open file
+  if (file.open("/data/actions.txt", ASGE::FILEIO::File::IOMode::READ))
+  {
+    // Get file data
+    using Buffer = ASGE::FILEIO::IOBuffer;
+    Buffer buffer = file.read();
+    std::string raw_data = buffer.as_char();
+    file.close();
+
+    // Format data
+    std::string data = raw_data.substr(0, raw_data.find_last_of("]"));
+    data += "]";
+
+    // Read file data as JSON
+    auto file_data = nlohmann::json::parse(raw_data);
+
+    // Populate each action with it's information
+    for (const auto& action : file_data.items())
+    {
+      int id = action.value()["ID"];
+      std::string verb = action.value()["Verb"];
+      int second_word = action.value()["Object"];
+      int required_objects[3] = { action.value()["Required Objects"][0],
+                                  action.value()["Required Objects"][1],
+                                  action.value()["Required Objects"][2] };
+      int required_room = action.value()["Required Room"];
+      std::string response = action.value()["Response"];
+
+      actions[id].setup(
+        id, verb, second_word, required_objects, required_room, response);
+    }
+
+    std::cout << "Loaded Actions" << std::endl;
+  }
+  else
+  {
+    std::cout << "Actions file not found" << std::endl;
+  }
 }
 
 void MyASGEGame::loadRooms()
@@ -67,8 +114,12 @@ void MyASGEGame::loadRooms()
     std::string raw_data = buffer.as_char();
     file.close();
 
+    // Format data
+    std::string data = raw_data.substr(0, raw_data.find_last_of("]"));
+    data += "]";
+
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(raw_data);
+    auto file_data = nlohmann::json::parse(data);
 
     // Populate each room with it's information
     for (const auto& room : file_data.items())
@@ -167,7 +218,7 @@ bool MyASGEGame::init()
   mouse_callback_id = inputs->addCallbackFnc(
     ASGE::E_MOUSE_CLICK, &MyASGEGame::clickHandler, this);
 
-  input_controller.LoadWords();
+  loadWords();
 
   return true;
 }
@@ -211,7 +262,7 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
   {
     signalExit();
   }
-  else if (screen_open == MENU_SCREEN)
+  else if (screen_open == DATA::MENU_SCREEN)
   {
     input_controller.menuOption(key->key, key->action, &menu_option, 2);
 
@@ -228,7 +279,7 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
       }
     }
   }
-  else if (screen_open == GAME_SCREEN)
+  else if (screen_open == DATA::GAME_SCREEN)
   {
     input_controller.update(key->key, key->action);
 
@@ -243,9 +294,9 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
 
       for (int i = 0; i < DATA::ACTION_NUM; i++)
       {
-        if (input_controller.words(i)->actionVerb() == action)
+        if (actions[i].actionVerb() == action)
         {
-          current_action = input_controller.words(i)->actionID();
+          current_action = actions[i].actionID();
           break;
         }
       }
@@ -282,7 +333,7 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
       input_controller.input(&empty_input);
     }
   }
-  else if (screen_open == GAME_OVER_SCREEN)
+  else if (screen_open == DATA::GAME_OVER_SCREEN)
   {
     input_controller.menuOption(key->key, key->action, &menu_option, 3);
 
@@ -295,7 +346,7 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
       }
       else if (menu_option == 1)
       {
-        screen_open = MENU_SCREEN;
+        screen_open = DATA::MENU_SCREEN;
         menu_option = 0;
       }
       else
@@ -336,9 +387,10 @@ void MyASGEGame::clickHandler(ASGE::SharedEventData data)
  */
 void MyASGEGame::update(const ASGE::GameTime& game_time)
 {
-  if (screen_open == GAME_SCREEN && current_action != -1 && validateInput())
+  if (screen_open == DATA::GAME_SCREEN && current_action != -1 &&
+      validateInput())
   {
-    action_response = input_controller.words(current_action)->output();
+    action_response = actions[current_action].output();
 
     if (!checkFrozen())
     {
@@ -397,22 +449,27 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
         }
         case (11):
         {
-          if (current_action_object + 1 == 19)
+          if (rooms[28].South())
           {
-            if (rooms[28].South())
-            {
-              action_response = "You've already done this action.";
-            }
-            else
-            {
-              action_response = input_controller.words(11)->output();
-              changeExits(28, 2);
-            }
+            action_response = "You've already done this action.";
           }
-          else if (current_action_object + 1 == 20)
+          else
           {
-            action_response = input_controller.words(12)->output();
+            action_response = actions[11].output();
+            changeExits(28, 2);
+          }
+          break;
+        }
+        case (12):
+        {
+          if (objects[16].hidden())
+          {
+            action_response = actions[12].output();
             revealCandle();
+          }
+          else
+          {
+            action_response = "You've already done this action.";
           }
           break;
         }
@@ -457,7 +514,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           }
           else
           {
-            action_response = input_controller.words(current_action)->output();
+            action_response = actions[current_action].output();
           }
           break;
         }
@@ -467,8 +524,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           {
             if (!climbed_tree)
             {
-              action_response =
-                input_controller.words(current_action)->output();
+              action_response = actions[current_action].output();
               climbed_tree = true;
             }
             else
@@ -528,7 +584,7 @@ void MyASGEGame::render(const ASGE::GameTime&)
 {
   renderer->setFont(0);
 
-  if (screen_open == MENU_SCREEN)
+  if (screen_open == DATA::MENU_SCREEN)
   {
     renderer->renderText("BASIC REB0RN", 317, 200, 3, ASGE::COLOURS::GRAY);
     renderer->renderText(menu_option == 0 ? ">> PLAY" : "   PLAY",
@@ -542,7 +598,7 @@ void MyASGEGame::render(const ASGE::GameTime&)
                          2,
                          ASGE::COLOURS::GRAY);
   }
-  else if (screen_open == GAME_SCREEN)
+  else if (screen_open == DATA::GAME_SCREEN)
   {
     renderer->renderText(
       "HAUNTED HOUSE ADVENTURE", 136, 80, 3, ASGE::COLOURS::GRAY);
@@ -593,7 +649,7 @@ void MyASGEGame::render(const ASGE::GameTime&)
                          ASGE::COLOURS::GRAY);
     renderer->renderText(action_response, 10, 430, 2, ASGE::COLOURS::GRAY);
   }
-  else if (screen_open == GAME_OVER_SCREEN)
+  else if (screen_open == DATA::GAME_OVER_SCREEN)
   {
     renderer->renderText("GAME OVER", 377, 200, 3, ASGE::COLOURS::GRAY);
     renderer->renderText(menu_option == 0 ? ">> PLAY AGAIN" : "   PLAY AGAIN",
@@ -653,27 +709,34 @@ int MyASGEGame::checkRoom(int object)
 bool MyASGEGame::validateInput()
 {
   // Check has two words if needed
-  if (input_controller.words(current_action)->actionObject() != -1 &&
+  if (actions[current_action].actionObject() != -1 &&
       current_action_object == -1)
   {
     action_response = "You need to say a valid object with\nthis action.";
     return false;
   }
   // Check correct object
-  if (input_controller.words(current_action)->actionObject() > 0 &&
-      current_action_object + 1 !=
-        input_controller.words(current_action)->actionObject())
+  if (current_action == 11 || current_action == 13)
+  {
+    if (current_action_object + 1 == actions[current_action + 1].actionObject())
+    {
+      current_action += 1;
+    }
+  }
+  else if (actions[current_action].actionObject() > 0 &&
+           current_action_object + 1 != actions[current_action].actionObject())
   {
     action_response = "You can't do that.";
     return false;
   }
+
   // Check have objects
-  if (input_controller.words(current_action)->objectsNeeded()[0] != -1)
+  if (actions[current_action].objectsNeeded()[0] != -1)
   {
     bool has_objects = true;
     for (int i = 0; i < 3; i++)
     {
-      int obj = input_controller.words(current_action)->objectsNeeded()[i];
+      int obj = actions[current_action].objectsNeeded()[i];
       if (obj != -1 && checkInventory(obj - 1) == -1)
       {
         has_objects = false;
@@ -688,8 +751,8 @@ bool MyASGEGame::validateInput()
     }
   }
   // Check correct room
-  if (input_controller.words(current_action)->requiredRoom() != -1 &&
-      input_controller.words(current_action)->requiredRoom() != current_room)
+  if (actions[current_action].requiredRoom() != -1 &&
+      actions[current_action].requiredRoom() != current_room)
   {
     action_response = "You can't do this here.";
     return false;
@@ -708,7 +771,7 @@ void MyASGEGame::showActions()
     }
     else
     {
-      action_response += input_controller.words(i)->actionVerb() + ", ";
+      action_response += actions[i].actionVerb() + ", ";
     }
   }
 }
@@ -921,8 +984,7 @@ void MyASGEGame::examineObject()
   }
   else if (current_action_object + 1 == 20)
   {
-    action_response = objects[20].examine();
-    revealCandle();
+    action_response = objects[current_action_object].examine();
   }
 }
 
@@ -963,7 +1025,15 @@ void MyASGEGame::say()
   if (say_value == "XZANFAR")
   {
     action_response += "\n*MAGIC OCCURS*";
-    changeExits(45, 3);
+    if (current_room == 45)
+    {
+      action_response += "\nThe magical barrier falls";
+      changeExits(45, 3);
+    }
+    else
+    {
+      current_room = rand() % DATA::SAY_RANDOM_ROOM_NUM;
+    }
   }
 }
 

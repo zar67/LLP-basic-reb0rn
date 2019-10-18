@@ -19,17 +19,14 @@ class Input
   Input() = default;
   ~Input() = default;
 
-  void LoadWords();
   void update(int key, int action);
 
   int menuOption(int key, int action, int* menu_option, int num_options);
 
-  Action* words(int index);
   std::string input();
   void input(const std::string* input);
 
  private:
-  Action actions[DATA::ACTION_NUM];
   std::string current_input = "";
 };
 
