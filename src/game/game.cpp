@@ -1032,7 +1032,7 @@ void MyASGEGame::say()
     }
     else
     {
-      current_room = rand() % DATA::SAY_RANDOM_ROOM_NUM;
+      current_room = say_random_rooms[rand() % DATA::SAY_RANDOM_ROOM_NUM];
     }
   }
 }
