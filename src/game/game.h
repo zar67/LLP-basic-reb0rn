@@ -34,6 +34,8 @@ class MyASGEGame : public ASGE::OGLGame
   int checkInventory(int ID);
   int checkRoom();
   int checkRoom(int object);
+  void checkEndState();
+  void setScore();
   bool validateInput();
 
   void showActions();
@@ -60,6 +62,8 @@ class MyASGEGame : public ASGE::OGLGame
   int key_callback_id = -1;   /**< Key Input Callback ID. */
   int mouse_callback_id = -1; /**< Mouse Input Callback ID. */
 
+  bool in_end_state = false;
+  bool game_over = false;
   int screen_open = 0;
   int menu_option = 0;
 
@@ -69,8 +73,9 @@ class MyASGEGame : public ASGE::OGLGame
   Room rooms[DATA::ROOM_NUM];
   Object objects[DATA::OBJECT_NUM];
 
-  int inventory[DATA::OBJECT_NUM] = { 0 };
+  int inventory[DATA::OBJECT_NUM] = { -1 };
   int num_objects_carrying = 0;
+  int treasures[DATA::TREASURE_NUM] = { -1 };
 
   int current_room = 57;
   int current_action = -1;

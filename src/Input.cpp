@@ -26,7 +26,7 @@ int Input::menuOption(int key, int action, int* menu_option, int num_options)
 
     if (*menu_option < 0)
     {
-      *menu_option = 1;
+      *menu_option = num_options - 1;
     }
   }
   else if (key == ASGE::KEYS::KEY_DOWN && action == ASGE::KEYS::KEY_RELEASED)

@@ -49,7 +49,7 @@ void MyASGEGame::play()
 
   for (int i = 0; i < DATA::OBJECT_NUM; i++)
   {
-    inventory[i] = 0;
+    inventory[i] = -1;
   }
 
   screen_open = DATA::GAME_SCREEN;
@@ -170,6 +170,7 @@ void MyASGEGame::loadObjects()
     auto file_data = nlohmann::json::parse(data);
 
     // Populate each object with it's information
+    int treasure_count = 0;
     for (const auto& object : file_data.items())
     {
       int id = object.value()["ID"];
@@ -177,8 +178,15 @@ void MyASGEGame::loadObjects()
       std::string description = object.value()["Description"];
       bool carry = object.value()["Collectible"];
       bool hide = object.value()["Hidden"];
+      bool treasure = object.value()["Treasure"];
 
-      objects[id - 1].setup(id, &name, &description, carry, hide);
+      if (treasure)
+      {
+        treasures[treasure_count] = id - 1;
+        treasure_count += 1;
+      }
+
+      objects[id - 1].setup(id, &name, &description, carry, hide, treasure);
     }
 
     std::cout << "Loaded Objects" << std::endl;
@@ -387,195 +395,202 @@ void MyASGEGame::clickHandler(ASGE::SharedEventData data)
  */
 void MyASGEGame::update(const ASGE::GameTime& game_time)
 {
-  if (screen_open == DATA::GAME_SCREEN && current_action != -1 &&
-      validateInput())
+  if (screen_open == DATA::GAME_SCREEN && !game_over)
   {
-    action_response = actions[current_action].output();
-
-    if (!checkFrozen())
+    // Actions
+    if (current_action != -1 && validateInput())
     {
-      switch (current_action)
-      {
-        case (0):
-        {
-          showActions();
-          break;
-        }
-        case (1):
-        {
-          showInventory();
-          break;
-        }
-        case (2):
-        {
-          moveNorth();
-          break;
-        }
-        case (3):
-        {
-          moveEast();
-          break;
-        }
-        case (4):
-        {
-          moveSouth();
-          break;
-        }
-        case (5):
-        {
-          moveWest();
-          break;
-        }
-        case (6):
-        case (7):
-        {
-          addObjectToInventory();
+      action_response = actions[current_action].output();
 
-          if (current_action_object + 1 == 15 && current_room == 47)
-          {
-            changeExits(47, 0, false);
-            changeExits(47, 2, true);
-          }
-          break;
-        }
-        case (8):
+      if (!checkFrozen())
+      {
+        switch (current_action)
         {
-          examineObject();
-          break;
-        }
-        case (9):
-        {
-          removeObjectFromInventory();
-          break;
-        }
-        case (10):
-        {
-          showScore();
-          break;
-        }
-        case (11):
-        {
-          if (rooms[28].South())
+          case (0):
           {
-            action_response = "You've already done this action.";
+            showActions();
+            break;
           }
-          else
+          case (1):
           {
-            action_response = actions[11].output();
-            changeExits(28, 2, true);
+            showInventory();
+            break;
           }
-          break;
-        }
-        case (12):
-        {
-          if (objects[16].hidden())
+          case (2):
           {
-            action_response = actions[12].output();
-            revealCandle();
+            moveNorth();
+            break;
           }
-          else
+          case (3):
           {
-            action_response = "You've already done this action.";
+            moveEast();
+            break;
           }
-          break;
-        }
-        case (15):
-        {
-          say();
-          break;
-        }
-        case (16):
-        {
-          if (rooms[31].West())
+          case (4):
           {
-            action_response = "You've already done this action.";
+            moveSouth();
+            break;
           }
-          else
+          case (5):
           {
-            changeExits(31, 3, true);
-            changeExits(30, 1, true);
+            moveWest();
+            break;
           }
-          break;
-        }
-        case (17):
-        {
-          if (current_room == 7)
+          case (6):
+          case (7):
           {
-            action_response = "TIMBERRRRR!";
-            axed_tree = true;
+            addObjectToInventory();
+
+            if (current_action_object + 1 == 15 && current_room == 47)
+            {
+              changeExits(47, 0, false);
+              changeExits(47, 2, true);
+            }
+            break;
           }
-          else if (current_room == 43)
+          case (8):
           {
-            if (rooms[43].North())
+            examineObject();
+            break;
+          }
+          case (9):
+          {
+            removeObjectFromInventory();
+            break;
+          }
+          case (10):
+          {
+            showScore();
+            break;
+          }
+          case (11):
+          {
+            if (rooms[28].South())
             {
               action_response = "You've already done this action.";
             }
             else
             {
-              action_response = "You broke the thin wall.\nA secret room to "
-                                "the "
-                                "NORTH appears.";
-              changeExits(43, 0, true);
+              action_response = actions[11].output();
+              changeExits(28, 2, true);
             }
+            break;
           }
-          else
+          case (12):
           {
-            action_response = actions[current_action].output();
-          }
-          break;
-        }
-        case (18):
-        {
-          if (!axed_tree)
-          {
-            if (!climbed_tree)
+            if (objects[16].hidden())
             {
-              action_response = actions[current_action].output();
-              climbed_tree = true;
+              action_response = actions[12].output();
+              revealCandle();
             }
             else
             {
-              action_response = "You climb down the tree.";
+              action_response = "You've already done this action.";
             }
+            break;
           }
-          else
+          case (15):
           {
-            action_response = "You cut the tree down, you can't climb it now.";
+            say();
+            break;
           }
-          break;
-        }
-        case (19):
-        {
-          removeBats();
-          break;
-        }
-        case (20):
-        {
-          removeGhosts();
-          break;
-        }
-        case (21):
-        {
-          if (light_amount > 0)
+          case (16):
           {
-            light_ignited = true;
+            if (rooms[31].West())
+            {
+              action_response = "You've already done this action.";
+            }
+            else
+            {
+              changeExits(31, 3, true);
+              changeExits(30, 1, true);
+            }
+            break;
           }
-          else
+          case (17):
           {
-            action_response = "You're candle has burnt out, you can't light it "
-                              "again.";
+            if (current_room == 7)
+            {
+              action_response = "TIMBERRRRR!";
+              axed_tree = true;
+            }
+            else if (current_room == 43)
+            {
+              if (rooms[43].North())
+              {
+                action_response = "You've already done this action.";
+              }
+              else
+              {
+                action_response = "You broke the thin wall.\nA secret room to "
+                                  "the "
+                                  "NORTH appears.";
+                changeExits(43, 0, true);
+              }
+            }
+            else
+            {
+              action_response = actions[current_action].output();
+            }
+            break;
           }
-          break;
-        }
-        case (22):
-        {
-          light_ignited = false;
-          break;
+          case (18):
+          {
+            if (!axed_tree)
+            {
+              if (!climbed_tree)
+              {
+                action_response = actions[current_action].output();
+                climbed_tree = true;
+              }
+              else
+              {
+                action_response = "You climb down the tree.";
+              }
+            }
+            else
+            {
+              action_response = "You cut the tree down, you can't climb it "
+                                "now.";
+            }
+            break;
+          }
+          case (19):
+          {
+            removeBats();
+            break;
+          }
+          case (20):
+          {
+            removeGhosts();
+            break;
+          }
+          case (21):
+          {
+            if (light_amount > 0)
+            {
+              light_ignited = true;
+            }
+            else
+            {
+              action_response = "You're candle has burnt out, you can't light "
+                                "it "
+                                "again.";
+            }
+            break;
+          }
+          case (22):
+          {
+            light_ignited = false;
+            break;
+          }
         }
       }
+      current_action = -1;
+      current_action_object = -1;
+
+      checkEndState();
     }
-    current_action = -1;
-    current_action_object = -1;
   }
 }
 
@@ -658,19 +673,21 @@ void MyASGEGame::render(const ASGE::GameTime&)
   else if (screen_open == DATA::GAME_OVER_SCREEN)
   {
     renderer->renderText("GAME OVER", 377, 200, 3, ASGE::COLOURS::GRAY);
+    renderer->renderText(
+      "Score: " + std::to_string(score), 411, 240, 2, ASGE::COLOURS::GRAY);
     renderer->renderText(menu_option == 0 ? ">> PLAY AGAIN" : "   PLAY AGAIN",
                          372,
-                         350,
+                         375,
                          2,
                          ASGE::COLOURS::GRAY);
     renderer->renderText(menu_option == 1 ? ">> MENU" : "   MENU",
                          372,
-                         450,
+                         475,
                          2,
                          ASGE::COLOURS::GRAY);
     renderer->renderText(menu_option == 2 ? ">> QUIT" : "   QUIT",
                          372,
-                         550,
+                         575,
                          2,
                          ASGE::COLOURS::GRAY);
   }
@@ -710,6 +727,62 @@ int MyASGEGame::checkRoom(int object)
     }
   }
   return -1;
+}
+
+void MyASGEGame::checkEndState()
+{
+  if (!in_end_state)
+  {
+    bool items_collected = true;
+    for (int i = 0; i < DATA::TREASURE_NUM; i++)
+    {
+      if (checkInventory(treasures[i]) == -1)
+      {
+        items_collected = false;
+        break;
+      }
+    }
+
+    if (items_collected)
+    {
+      changeExits(41, 2, true);
+      in_end_state = true;
+    }
+  }
+
+  if (in_end_state)
+  {
+    if (current_room != 57)
+    {
+      action_response += "\nYou have collected all the treasures!\nHead "
+                         "back to the gate to see your score.";
+    }
+    else
+    {
+      game_over = true;
+      setScore();
+      screen_open = DATA::GAME_OVER_SCREEN;
+    }
+  }
+}
+
+void MyASGEGame::setScore()
+{
+  score = 0;
+  for (int i = 0; i < DATA::OBJECT_NUM; i++)
+  {
+    if (inventory[i] != -1)
+    {
+      if (objects[inventory[i]].treasure())
+      {
+        score += 10;
+      }
+      else
+      {
+        score += 1;
+      }
+    }
+  }
 }
 
 bool MyASGEGame::validateInput()

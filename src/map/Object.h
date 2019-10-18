@@ -17,13 +17,15 @@ class Object
              const std::string* descriptor,
              const std::string* examine,
              bool carry,
-             bool hide);
+             bool hide,
+             bool treasure);
 
   int objectID();
   std::string objectName();
   std::string examine();
   bool collectible();
   bool hidden();
+  bool treasure();
 
   void hidden(bool hide);
 
@@ -33,6 +35,7 @@ class Object
   std::string description;
   bool can_pick_up;
   bool hiding;
+  bool valuable;
 };
 
 #endif // PROJECT_OBJECT_H

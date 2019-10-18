@@ -8,13 +8,15 @@ void Object::setup(int id,
                    const std::string* descriptor,
                    const std::string* examine,
                    bool carry,
-                   bool hide)
+                   bool hide,
+                   bool treasure)
 {
   ID = id;
   name = *descriptor;
   description = *examine;
   can_pick_up = carry;
   hiding = hide;
+  valuable = treasure;
 }
 
 int Object::objectID()
@@ -40,6 +42,11 @@ bool Object::collectible()
 bool Object::hidden()
 {
   return hiding;
+}
+
+bool Object::treasure()
+{
+  return valuable;
 }
 
 void Object::hidden(bool hide)
