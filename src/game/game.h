@@ -37,6 +37,7 @@ class MyASGEGame : public ASGE::OGLGame
   void checkEndState();
   void setScore();
   bool validateInput();
+  void getAction();
 
   void showActions();
   void showInventory();
