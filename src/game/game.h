@@ -89,7 +89,7 @@ class MyASGEGame : public ASGE::OGLGame
     15, 16, 17, 23, 24, 25, 31, 32, 33, 34, 39, 40, 41,
     42, 43, 47, 48, 49, 56, 57, 58, 59, 60, 61, 62, 63
   };
-  bool climbed_tree = false;
+
   bool axed_tree = false;
   bool light_ignited = false;
 

@@ -140,7 +140,7 @@
 		"Verb": "SWING",
 		"Object": 13,
 		"Required Objects": [13, -1, -1],
-		"Required Room": 43,
+		"Required Room": -1,
 		"Response": "You swing your axe."
 	},
 	{
@@ -163,7 +163,7 @@
 		"ID": 20,
 		"Verb": "USE",
 		"Object": 10,
-		"Required Objects": [10, -1, -1],
+		"Required Objects": [10, 11, -1],
 		"Required Room": 52,
 		"Response": "All the ghosts are sucked up into the vacuum cleaner. HOORAY!"
 	},

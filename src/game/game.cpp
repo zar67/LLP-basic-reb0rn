@@ -46,13 +46,25 @@ void MyASGEGame::play()
   std::string empty_input = "";
   input_controller.input(&empty_input);
   num_objects_carrying = 0;
-
   for (int i = 0; i < DATA::OBJECT_NUM; i++)
   {
     inventory[i] = -1;
   }
 
   screen_open = DATA::GAME_SCREEN;
+
+  in_end_state = false;
+  game_over = false;
+  menu_option = 0;
+
+  current_action = -1;
+  current_action_object = -1;
+
+  axed_tree = false;
+  light_ignited = false;
+
+  std::string say_value = "";
+  std::string action_response = "";
 }
 
 void MyASGEGame::loadWords()
@@ -523,8 +535,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
               else
               {
                 action_response = "You broke the thin wall.\nA secret room to "
-                                  "the "
-                                  "NORTH appears.";
+                                  "the NORTH appears.";
                 changeExits(43, 0, true);
               }
             }
@@ -538,14 +549,13 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           {
             if (!axed_tree)
             {
-              if (!climbed_tree)
+              if (checkInventory(3) != -1)
               {
                 action_response = actions[current_action].output();
-                climbed_tree = true;
               }
               else
               {
-                action_response = "You climb down the tree.";
+                action_response = "You fall out of the tree! OUCH!";
               }
             }
             else
@@ -570,18 +580,19 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
             if (light_amount > 0)
             {
               light_ignited = true;
+              objects[6].hidden(false);
             }
             else
             {
               action_response = "You're candle has burnt out, you can't light "
-                                "it "
-                                "again.";
+                                "it again.";
             }
             break;
           }
           case (22):
           {
             light_ignited = false;
+            objects[6].hidden(true);
             break;
           }
         }
@@ -848,7 +859,8 @@ void MyASGEGame::showActions()
     {
       action_response += "\n";
     }
-    else
+
+    if (i != 12 && i != 14)
     {
       action_response += actions[i].actionVerb() + ", ";
     }
@@ -859,16 +871,13 @@ void MyASGEGame::showInventory()
 {
   for (int i = 0; i < DATA::OBJECT_NUM; i++)
   {
-    if (inventory[i] != 0)
+    if (inventory[i] != -1)
     {
-      if (i % 7 == 0 && i != 0)
+      if (i % 4 == 0 && i != 0)
       {
         action_response += "\n";
       }
-      else
-      {
-        action_response += objects[inventory[i]].objectName() + ", ";
-      }
+      action_response += objects[inventory[i]].objectName() + ", ";
     }
   }
 }
@@ -1027,7 +1036,7 @@ void MyASGEGame::removeObjectFromInventory()
         }
       }
 
-      inventory[num_objects_carrying] = 0;
+      inventory[num_objects_carrying] = -1;
       num_objects_carrying -= 1;
       action_response =
         "You dropped " + objects[current_action_object].objectName();

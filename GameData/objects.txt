@@ -52,7 +52,7 @@
 "Name": "STATUE",
 "Description": "A small ebony statue.",
 "Collectible": true,
-"Hidden": false,
+"Hidden": true,
 "Treasure": true
 },
 {

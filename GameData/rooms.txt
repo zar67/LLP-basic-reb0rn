@@ -44,7 +44,7 @@
     {
         "ID": 6,
         "Name": "THICK FOREST",
-        "Exits": [false, true, false, true],
+        "Exits": [false, true, true, true],
         "Items": [-1, -1, -1, -1, -1],
 		"Dark": false
     },
@@ -200,7 +200,7 @@
         "Name": "HALL WITH LOCKED DOOR",
         "Exits": [false, true, false, true],
         "Items": [7, -1, -1, -1, -1],
-		"Dark": true
+		"Dark": false
     },
     {
         "ID": 29,
@@ -352,7 +352,7 @@
     {
         "ID": 50,
         "Name": "FRONT TOWER",
-        "Exits": [false, false, false, true],
+        "Exits": [false, true, false, false],
         "Items": [14, -1, -1, -1, -1],
 		"Dark": false
     },
