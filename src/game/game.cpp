@@ -891,6 +891,12 @@ void MyASGEGame::moveNorth()
     {
       current_room -= 8;
       action_response = "You move NORTH";
+
+      if (current_room == 41)
+      {
+        action_response = "The door slams shut behind you, and locks...";
+      }
+
       checkLight();
     }
     else
