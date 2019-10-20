@@ -1,0 +1,38 @@
+HOW TO PLAY:
+Use the NESW commands to move around the map.
+HELP will let you see all the commands.
+
+You need to collect all 8 treasures in order to win:
+	- Painting
+	- Ring
+	- Spellbook
+	- Scroll
+	- Coins
+	- Candlestick
+	- Goblet
+Then get back to the starting point in order to finish the game and see your score.
+
+WALKTHROUGH:
+1. Collect the AEROSOL, east from the starting position.
+2. Go back to the start and go into the house.
+3. Go west and collect the KEY from in the COAT in the cupboard.
+4. Go back to the main hallway and head north and out the back of the house, collecting VACUUM and MATCHES along the way.
+5. When outside, collect the AXE and SHOVEL.
+6. Head back into the house and head south to the Front Hall, then head east and south to the Library and Study.
+7. Collect the CANDLESTICK, and CANDLE (hidden in the DRAWER). 
+8. Swing your AXE in the study to reveal the secret room and collect the SPELLBOOK from inside.
+9. Head back out of the Library and head north to the Pool of Light, collect the BATTERIES.
+10. Light the CANDLE.
+11. Go north and head to the Rear Turret Room, use the AEROSOL to scatter the BATS and collect the SCROLL.
+12. Head back to the Pool of Light and this time go east until you find the locked door.
+13. Unlock it with the KEY.
+14. Head south to the GHOSTS and use the VACUUM on them.
+15. Then head west to get the GOBLET. 
+16. Head back the way you came and head east from the Cobwebby Room to collect the PAINTING.
+17. Say the word ‘XZANFAR’ to knock down the magical barrier blocking the way in the Cold Chamber.
+18. Head north to the locked door and head east and then north to get to the Slippery Stairs.
+19. Go south and collect the RING then go back to the Cellar and dig the bars out with the SHOVEL.
+20. Head east to get out of the house then head south and get into the BOAT.
+21. Go south through the Marsh and get out when the BOAT becomes stuck.
+22. Then head west until you reach the starting point and the game ends.
+23. You win.
