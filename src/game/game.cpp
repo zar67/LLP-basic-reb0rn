@@ -565,14 +565,14 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
             }
             else
             {
-              if (checkInventory(3) != -1)
+              if (checkInventory(3) == -1)
               {
-                action_response = actions[current_action].output();
-                up_tree = true;
+                action_response = "You fall out of the tree! OUCH!";
               }
               else
               {
-                action_response = "You fall out of the tree! OUCH!";
+                action_response = actions[current_action].output();
+                up_tree = true;
               }
             }
           }
@@ -1010,16 +1010,16 @@ void MyASGEGame::addObjectToInventory()
     action_response =
       "You picked up " + objects[current_action_object].objectName();
   }
-  else if (!objects[current_action_object].collectible())
-  {
-    action_response =
-      "You cannot pickup " + objects[current_action_object].objectName();
-  }
-  else
+  else if (objects[current_action_object].collectible())
   {
     action_response = "There is no " +
                       objects[current_action_object].objectName() +
                       " in this room";
+  }
+  else
+  {
+    action_response =
+      "You cannot pickup " + objects[current_action_object].objectName();
   }
 }
 
