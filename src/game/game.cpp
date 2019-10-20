@@ -82,7 +82,8 @@ void MyASGEGame::loadWords()
     file.close();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
+    auto file_data =
+      nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
 
     // Populate each action with it's information
     for (const auto& action : file_data.items())
@@ -122,7 +123,8 @@ void MyASGEGame::loadRooms()
     file.close();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
+    auto file_data =
+      nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
 
     // Populate each room with it's information
     for (const auto& room : file_data.items())
@@ -165,7 +167,8 @@ void MyASGEGame::loadObjects()
     file.close();
 
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
+    auto file_data =
+      nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
 
     // Populate each object with it's information
     int treasure_count = 0;
