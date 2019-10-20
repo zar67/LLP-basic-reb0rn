@@ -132,7 +132,7 @@
 		"Verb": "DIG",
 		"Object": -1,
 		"Required Objects": [12, -1, -1],
-		"Required Room": 31,
+		"Required Room": -1,
 		"Response": "The bars on the cellar window are loosened\nand you pull them away.\nYou can now get into the cellar."
 	},
 	{

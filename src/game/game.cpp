@@ -516,7 +516,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           {
             action_response = "You've already done this action.";
           }
-          else
+          else if (current_room == 30 || current_room == 31)
           {
             changeExits(31, 3, true);
             changeExits(30, 1, true);
@@ -1101,6 +1101,7 @@ void MyASGEGame::examineObject()
 
 void MyASGEGame::showScore()
 {
+  setScore();
   action_response = "Your score is: " + std::to_string(score);
 }
 
