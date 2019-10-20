@@ -74,20 +74,15 @@ void MyASGEGame::loadWords()
   File file = File();
 
   // Open file
-  if (file.open("/data/actions.txt", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/actions.json", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
-    std::string raw_data = buffer.as_char();
     file.close();
 
-    // Format data
-    std::string data = raw_data.substr(0, raw_data.find_last_of("]"));
-    data += "]";
-
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(data);
+    auto file_data = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
 
     // Populate each action with it's information
     for (const auto& action : file_data.items())
@@ -119,20 +114,15 @@ void MyASGEGame::loadRooms()
   File file = File();
 
   // Open file
-  if (file.open("/data/rooms.txt", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/rooms.json", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
-    std::string raw_data = buffer.as_char();
     file.close();
 
-    // Format data
-    std::string data = raw_data.substr(0, raw_data.find_last_of("]"));
-    data += "]";
-
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(data);
+    auto file_data = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
 
     // Populate each room with it's information
     for (const auto& room : file_data.items())
@@ -167,20 +157,15 @@ void MyASGEGame::loadObjects()
   File file = File();
 
   // Open file
-  if (file.open("/data/objects.txt", ASGE::FILEIO::File::IOMode::READ))
+  if (file.open("/data/objects.json", ASGE::FILEIO::File::IOMode::READ))
   {
     // Get file data
     using Buffer = ASGE::FILEIO::IOBuffer;
     Buffer buffer = file.read();
-    std::string raw_data = buffer.as_char();
     file.close();
 
-    // Format String
-    std::string data = raw_data.substr(0, raw_data.find("]"));
-    data += "]";
-
     // Read file data as JSON
-    auto file_data = nlohmann::json::parse(data);
+    auto file_data = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
 
     // Populate each object with it's information
     int treasure_count = 0;
