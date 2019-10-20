@@ -92,6 +92,7 @@ class MyASGEGame : public ASGE::OGLGame
   };
 
   bool axed_tree = false;
+  bool up_tree = false;
   bool light_ignited = false;
 
   std::string say_value = "";

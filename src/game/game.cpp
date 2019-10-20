@@ -61,10 +61,11 @@ void MyASGEGame::play()
   current_action_object = -1;
 
   axed_tree = false;
+  up_tree = false;
   light_ignited = false;
 
   say_value = "";
-  action_response = "";
+  action_response = "The gate slams shut behind you.";
 }
 
 void MyASGEGame::loadWords()
@@ -557,13 +558,22 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           }
           else
           {
-            if (checkInventory(3) != -1)
+            if (up_tree)
             {
-              action_response = actions[current_action].output();
+              action_response = "You climb down the tree.";
+              up_tree = false;
             }
             else
             {
-              action_response = "You fall out of the tree! OUCH!";
+              if (checkInventory(3) != -1)
+              {
+                action_response = actions[current_action].output();
+                up_tree = true;
+              }
+              else
+              {
+                action_response = "You fall out of the tree! OUCH!";
+              }
             }
           }
           break;
@@ -587,7 +597,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
           }
           else
           {
-            action_response = "You're candle has burnt out, you can't light "
+            action_response = "You're candle has burnt out,\nyou can't light "
                               "it again.";
           }
           break;
