@@ -302,7 +302,7 @@
     },
     {
         "ID": 43,
-        "Name": "STUDY",
+        "Name": "STUDY WITH HOLE IN WALL",
         "Exits": [false, false, false, true],
         "Items": [17, 21, -1, -1, -1],
 		"Dark": false
