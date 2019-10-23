@@ -37,12 +37,9 @@ MyASGEGame::~MyASGEGame()
 
 void MyASGEGame::play()
 {
-  loadRooms();
-  loadObjects();
+  map.reset();
 
-  current_room = 57;
   score = 0;
-  light_amount = 40;
   std::string empty_input = "";
   input_controller.input(&empty_input);
   num_objects_carrying = 0;
@@ -62,7 +59,6 @@ void MyASGEGame::play()
 
   axed_tree = false;
   up_tree = false;
-  light_ignited = false;
 
   say_value = "";
   action_response = "The gate slams shut behind you.";
@@ -106,95 +102,6 @@ void MyASGEGame::loadWords()
   else
   {
     std::cout << "Actions file not found" << std::endl;
-  }
-}
-
-void MyASGEGame::loadRooms()
-{
-  using File = ASGE::FILEIO::File;
-  File file = File();
-
-  // Open file
-  if (file.open("/data/rooms.json", ASGE::FILEIO::File::IOMode::READ))
-  {
-    // Get file data
-    using Buffer = ASGE::FILEIO::IOBuffer;
-    Buffer buffer = file.read();
-    file.close();
-
-    // Read file data as JSON
-    auto file_data =
-      nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
-
-    // Populate each room with it's information
-    for (const auto& room : file_data.items())
-    {
-      int id = room.value()["ID"];
-      std::string name = room.value()["Name"];
-      bool north = room.value()["Exits"][0];
-      bool east = room.value()["Exits"][1];
-      bool south = room.value()["Exits"][2];
-      bool west = room.value()["Exits"][3];
-      int items[5] = { room.value()["Items"][0],
-                       room.value()["Items"][1],
-                       room.value()["Items"][2],
-                       room.value()["Items"][3],
-                       room.value()["Items"][4] };
-      bool dark = room.value()["Dark"];
-
-      rooms[id].setup(id, &name, north, east, south, west, items, dark);
-    }
-
-    std::cout << "Loaded Rooms" << std::endl;
-  }
-  else
-  {
-    std::cout << "Rooms file not found" << std::endl;
-  }
-}
-
-void MyASGEGame::loadObjects()
-{
-  using File = ASGE::FILEIO::File;
-  File file = File();
-
-  // Open file
-  if (file.open("/data/objects.json", ASGE::FILEIO::File::IOMode::READ))
-  {
-    // Get file data
-    using Buffer = ASGE::FILEIO::IOBuffer;
-    Buffer buffer = file.read();
-    file.close();
-
-    // Read file data as JSON
-    auto file_data =
-      nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
-
-    // Populate each object with it's information
-    int treasure_count = 0;
-    for (const auto& object : file_data.items())
-    {
-      int id = object.value()["ID"];
-      std::string name = object.value()["Name"];
-      std::string description = object.value()["Description"];
-      bool carry = object.value()["Collectible"];
-      bool hide = object.value()["Hidden"];
-      bool treasure = object.value()["Treasure"];
-
-      if (treasure)
-      {
-        treasures[treasure_count] = id - 1;
-        treasure_count += 1;
-      }
-
-      objects[id - 1].setup(id, &name, &description, carry, hide, treasure);
-    }
-
-    std::cout << "Loaded Objects" << std::endl;
-  }
-  else
-  {
-    std::cout << "Objects file not found" << std::endl;
   }
 }
 
@@ -289,9 +196,9 @@ void MyASGEGame::getAction()
     {
       for (int i = 0; i < DATA::OBJECT_NUM; i++)
       {
-        if (objects[i].objectName() == object)
+        if (map.object(i).objectName() == object)
         {
-          current_action_object = objects[i].objectID() - 1;
+          current_action_object = map.object(i).objectID() - 1;
           break;
         }
       }
@@ -422,22 +329,22 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
         }
         case (2):
         {
-          moveNorth();
+          action_response = map.moveNorth();
           break;
         }
         case (3):
         {
-          moveEast();
+          action_response = map.moveEast();
           break;
         }
         case (4):
         {
-          moveSouth();
+          action_response = map.moveSouth();
           break;
         }
         case (5):
         {
-          moveWest();
+          action_response = map.moveWest();
           break;
         }
         case (6):
@@ -445,10 +352,11 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
         {
           addObjectToInventory();
 
-          if (current_action_object + 1 == 15 && current_room == 47)
+          if (current_action_object + 1 == 15 &&
+              map.currentRoom().roomID() == 47)
           {
-            changeExits(47, 0, false);
-            changeExits(47, 2, true);
+            map.changeExits(47, 0, false);
+            map.changeExits(47, 2, true);
           }
           break;
         }
@@ -469,23 +377,23 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
         }
         case (11):
         {
-          if (rooms[28].South())
+          if (map.room(28).South())
           {
             action_response = "You've already done this action.";
           }
           else
           {
             action_response = actions[11].output();
-            changeExits(28, 2, true);
+            map.changeExits(28, 2, true);
           }
           break;
         }
         case (12):
         {
-          if (objects[16].hidden())
+          if (map.object(16).hidden())
           {
             action_response = actions[12].output();
-            revealCandle();
+            map.revealObject(16);
           }
           else
           {
@@ -500,27 +408,28 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
         }
         case (16):
         {
-          if (rooms[31].West())
+          if (map.room(31).West())
           {
             action_response = "You've already done this action.";
           }
-          else if (current_room == 30 || current_room == 31)
+          else if (map.currentRoom().roomID() == 30 ||
+                   map.currentRoom().roomID() == 31)
           {
-            changeExits(31, 3, true);
-            changeExits(30, 1, true);
+            map.changeExits(31, 3, true);
+            map.changeExits(30, 1, true);
           }
           break;
         }
         case (17):
         {
-          if (current_room == 7)
+          if (map.currentRoom().roomID() == 7)
           {
             action_response = "TIMBERRRRR!";
             axed_tree = true;
           }
-          else if (current_room == 43)
+          else if (map.currentRoom().roomID() == 43)
           {
-            if (rooms[43].North())
+            if (map.room(43).North())
             {
               action_response = "You've already done this action.";
             }
@@ -528,7 +437,7 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
             {
               action_response = "You broke the thin wall.\nA secret room to "
                                 "the NORTH appears.";
-              changeExits(43, 0, true);
+              map.changeExits(43, 0, true);
             }
           }
           else
@@ -568,32 +477,22 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
         }
         case (19):
         {
-          removeBats();
+          action_response = map.removeBats();
           break;
         }
         case (20):
         {
-          removeGhosts();
+          action_response = map.removeGhosts();
           break;
         }
         case (21):
         {
-          if (light_amount > 0)
-          {
-            light_ignited = true;
-            objects[6].hidden(false);
-          }
-          else
-          {
-            action_response = "You're candle has burnt out,\nyou can't light "
-                              "it again.";
-          }
+          action_response = map.lightCandle();
           break;
         }
         case (22):
         {
-          light_ignited = false;
-          objects[6].hidden(true);
+          map.unlightCandle();
           break;
         }
         default:
@@ -641,27 +540,27 @@ void MyASGEGame::render(const ASGE::GameTime&)
                          110,
                          2,
                          ASGE::COLOURS::GRAY);
-    renderer->renderText("YOUR LOCATION: " + rooms[current_room].roomName(),
+    renderer->renderText("YOUR LOCATION: " + map.currentRoom().roomName(),
                          10,
                          150,
                          2,
                          ASGE::COLOURS::GRAY);
 
     std::string exits = "";
-    exits += rooms[current_room].North() ? "N, " : "";
-    exits += rooms[current_room].East() ? "E, " : "";
-    exits += rooms[current_room].South() ? "S, " : "";
-    exits += rooms[current_room].West() ? "W" : "";
+    exits += map.currentRoom().North() ? "N, " : "";
+    exits += map.currentRoom().East() ? "E, " : "";
+    exits += map.currentRoom().South() ? "S, " : "";
+    exits += map.currentRoom().West() ? "W" : "";
 
     renderer->renderText("EXITS: " + exits, 10, 190, 2, ASGE::COLOURS::GRAY);
 
     std::string items_text = "";
-    int* items = rooms[current_room].roomObjects();
+    int* items = map.currentRoom().roomObjects();
     for (int i = 0; i < 5; i++)
     {
-      if (items[i] != -1 && !objects[items[i] - 1].hidden())
+      if (items[i] != -1 && !map.object(items[i] - 1).hidden())
       {
-        items_text += objects[items[i] - 1].objectName() + ", ";
+        items_text += map.object(items[i] - 1).objectName() + ", ";
       }
     }
 
@@ -718,30 +617,6 @@ int MyASGEGame::checkInventory(int ID)
   return -1;
 }
 
-int MyASGEGame::checkRoom()
-{
-  for (int i = 0; i < 5; i++)
-  {
-    if (rooms[current_room].roomObjects()[i] == current_action_object + 1)
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-
-int MyASGEGame::checkRoom(int object)
-{
-  for (int i = 0; i < 5; i++)
-  {
-    if (rooms[current_room].roomObjects()[i] == object)
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-
 void MyASGEGame::checkEndState()
 {
   if (!in_end_state)
@@ -749,7 +624,7 @@ void MyASGEGame::checkEndState()
     bool items_collected = true;
     for (int i = 0; i < DATA::TREASURE_NUM; i++)
     {
-      if (checkInventory(treasures[i]) == -1)
+      if (checkInventory(map.treasure(i)) == -1)
       {
         items_collected = false;
         break;
@@ -758,14 +633,14 @@ void MyASGEGame::checkEndState()
 
     if (items_collected)
     {
-      changeExits(41, 2, true);
+      map.changeExits(41, 2, true);
       in_end_state = true;
     }
   }
 
   if (in_end_state)
   {
-    if (current_room == 57)
+    if (map.currentRoom().roomID() == 57)
     {
       game_over = true;
       setScore();
@@ -786,7 +661,7 @@ void MyASGEGame::setScore()
   {
     if (inventory[i] != -1)
     {
-      if (objects[inventory[i]].treasure())
+      if (map.object(inventory[i]).treasure())
       {
         score += 10;
       }
@@ -844,7 +719,7 @@ bool MyASGEGame::validateInput()
   }
   // Check correct room
   if (actions[current_action].requiredRoom() != -1 &&
-      actions[current_action].requiredRoom() != current_room)
+      actions[current_action].requiredRoom() != map.currentRoom().roomID())
   {
     action_response = "You can't do this here.";
     return false;
@@ -879,135 +754,33 @@ void MyASGEGame::showInventory()
       {
         action_response += "\n";
       }
-      action_response += objects[inventory[i]].objectName() + ", ";
-    }
-  }
-}
-
-void MyASGEGame::moveNorth()
-{
-  if (rooms[current_room].North())
-  {
-    if (!rooms[current_room - 8].needsLight() ||
-        (rooms[current_room - 8].needsLight() && light_ignited))
-    {
-      current_room -= 8;
-      action_response = "You move NORTH";
-
-      if (current_room == 41)
-      {
-        action_response = "The door slams shut behind you, and locks...";
-      }
-
-      checkLight();
-    }
-    else
-    {
-      action_response = "You need a light to go NORTH";
-    }
-  }
-  else
-  {
-    action_response = "You can't go that way!";
-  }
-}
-
-void MyASGEGame::moveEast()
-{
-  if (rooms[current_room].East())
-  {
-    if (!rooms[current_room + 1].needsLight() ||
-        (rooms[current_room + 1].needsLight() && light_ignited))
-    {
-      current_room += 1;
-      action_response = "You move EAST";
-      checkLight();
-    }
-    else
-    {
-      action_response = "You need a light to go EAST";
-    }
-  }
-  else
-  {
-    action_response = "You can't go that way!";
-  }
-}
-
-void MyASGEGame::moveSouth()
-{
-  if (rooms[current_room].South())
-  {
-    if (!rooms[current_room + 8].needsLight() ||
-        (rooms[current_room + 8].needsLight() && light_ignited))
-    {
-      current_room += 8;
-      action_response = "You move SOUTH";
-      checkLight();
-    }
-    else
-    {
-      action_response = "You need a light to go SOUTH";
-    }
-  }
-  else
-  {
-    action_response = "You can't go that way!";
-  }
-}
-
-void MyASGEGame::moveWest()
-{
-  if (rooms[current_room].West())
-  {
-    if (!rooms[current_room - 1].needsLight() ||
-        (rooms[current_room - 1].needsLight() && light_ignited))
-    {
-      current_room -= 1;
-      action_response = "You move WEST";
-      checkLight();
-    }
-    else
-    {
-      action_response = "You need a light to go WEST";
-    }
-  }
-  else
-  {
-    if (current_room == 45)
-    {
-      action_response = "There's a magical barrier blocking the way.\nUnless "
-                        "you know a magical spell,\nthere's no way out...";
-    }
-    else
-    {
-      action_response = "You can't go that way!";
+      action_response += map.object(inventory[i]).objectName() + ", ";
     }
   }
 }
 
 void MyASGEGame::addObjectToInventory()
 {
-  int index = checkRoom();
-  if (index != -1 && objects[current_action_object].collectible() &&
-      !objects[current_action_object].hidden())
+  int index = map.checkRoom(current_action_object + 1);
+  if (index != -1 && map.object(current_action_object).collectible() &&
+      !map.object(current_action_object).hidden())
   {
-    rooms[current_room].roomObjects()[index] = -1;
+    map.removeObjectFromCurrentRoom(index);
     inventory[num_objects_carrying] = current_action_object;
     num_objects_carrying += 1;
     action_response =
-      "You picked up " + objects[current_action_object].objectName();
+      "You picked up " + map.object(current_action_object).objectName();
   }
-  else if (objects[current_action_object].collectible())
+  else if (map.object(current_action_object).collectible())
   {
     action_response = "There is no " +
-                      objects[current_action_object].objectName() +
+                      map.object(current_action_object).objectName() +
                       " in this room";
   }
   else
   {
     action_response =
-      "You cannot pickup " + objects[current_action_object].objectName();
+      "You cannot pickup " + map.object(current_action_object).objectName();
   }
 }
 
@@ -1017,7 +790,7 @@ void MyASGEGame::removeObjectFromInventory()
   int inventory_index = 0;
   for (int i = 0; i < 5; i++)
   {
-    if (rooms[current_room].roomObjects()[i] == -1)
+    if (map.currentRoom().roomObjects()[i] == -1)
     {
       space_in_room = true;
       inventory_index = i;
@@ -1031,11 +804,11 @@ void MyASGEGame::removeObjectFromInventory()
     if (index == -1)
     {
       action_response =
-        "You aren't carrying " + objects[current_action_object].objectName();
+        "You aren't carrying " + map.object(current_action_object).objectName();
     }
     else
     {
-      rooms[current_room].roomObjects()[inventory_index] =
+      map.currentRoom().roomObjects()[inventory_index] =
         current_action_object + 1;
       for (int i = index; i < num_objects_carrying; i++)
       {
@@ -1052,38 +825,39 @@ void MyASGEGame::removeObjectFromInventory()
       inventory[num_objects_carrying] = -1;
       num_objects_carrying -= 1;
       action_response =
-        "You dropped " + objects[current_action_object].objectName();
+        "You dropped " + map.object(current_action_object).objectName();
     }
   }
   else
   {
     action_response = "There is no space to put down\n" +
-                      objects[current_action_object].objectName() +
+                      map.object(current_action_object).objectName() +
                       " try a different room";
   }
 }
 
 void MyASGEGame::examineObject()
 {
-  if ((checkRoom() != -1 || checkInventory(current_action_object) != -1) &&
-      !objects[current_action_object].hidden())
+  if ((map.checkRoom(current_action_object + 1) != -1 ||
+       checkInventory(current_action_object) != -1) &&
+      !map.object(current_action_object).hidden())
   {
-    action_response = objects[current_action_object].examine();
+    action_response = map.object(current_action_object).examine();
   }
   else
   {
     action_response =
-      "There is no " + objects[current_action_object].objectName() + " here";
+      "There is no " + map.object(current_action_object).objectName() + " here";
   }
 
-  if (current_action_object + 1 == 22)
+  if (current_action_object + 1 == 22 && map.object(17).hidden())
   {
-    objects[17].hidden(false);
+    map.revealObject(17);
     action_response += "\nA key is revealed!";
   }
   else if (current_action_object + 1 == 20)
   {
-    action_response = objects[current_action_object].examine();
+    action_response = map.object(current_action_object).examine();
   }
 }
 
@@ -1093,33 +867,6 @@ void MyASGEGame::showScore()
   action_response = "Your score is: " + std::to_string(score);
 }
 
-void MyASGEGame::changeExits(int room, int dir, bool value)
-{
-  switch (dir)
-  {
-    case 0:
-      rooms[room].North(value);
-      break;
-    case 1:
-      rooms[room].East(value);
-      break;
-    case 2:
-      rooms[room].South(value);
-      break;
-    case 3:
-      rooms[room].West(value);
-      break;
-    default:
-      break;
-  }
-}
-
-void MyASGEGame::revealCandle()
-{
-  objects[16].hidden(false);
-  action_response += "\nA candle is revealed!";
-}
-
 void MyASGEGame::say()
 {
   action_response = "You said '" + say_value + "'";
@@ -1127,110 +874,63 @@ void MyASGEGame::say()
   if (say_value == "XZANFAR")
   {
     action_response += "\n*MAGIC OCCURS*";
-    if (current_room == 45)
+    if (map.currentRoom().roomID() == 45)
     {
       action_response += "\nThe magical barrier falls";
-      changeExits(45, 3, true);
+      map.changeExits(45, 3, true);
     }
     else
     {
-      current_room = say_random_rooms[rand() % DATA::SAY_RANDOM_ROOM_NUM];
+      map.magicRandomRoom();
     }
   }
 }
 
 bool MyASGEGame::checkFrozen()
 {
-  if (current_room == 13 && checkRoom(23) != -1)
+  if (map.currentRoom().roomID() == 13 && map.checkRoom(23) != -1)
   {
     action_response = "The bats frighten you,\nyou're too scared to do "
                       "anything but run!";
     if (current_action == 5)
     {
-      moveWest();
+      action_response = map.moveWest();
       action_response = "You flee.";
     }
     else if (current_action == 19)
     {
-      removeBats();
-      action_response = "You vanquish the bats!";
+      action_response = map.removeBats();
     }
     return true;
   }
-  if (current_room == 52 && checkRoom(24) != -1)
+  if (map.currentRoom().roomID() == 52 && map.checkRoom(24) != -1)
   {
     action_response = "The ghosts frighten you,\nyou're too scared to do "
                       "anything but run!";
     if (current_action == 2)
     {
-      moveNorth();
+      action_response = map.moveNorth();
       action_response = "You flee.";
     }
     else if (current_action == 20)
     {
-      removeGhosts();
-      action_response = "You vanquish the ghosts!";
+      action_response = map.removeGhosts();
     }
     return true;
   }
 
-  if ((current_room == 61 || current_room == 62) && checkInventory(14) != -1)
+  if ((map.currentRoom().roomID() == 61 || map.currentRoom().roomID() == 62) &&
+      checkInventory(14) != -1)
   {
     action_response = "The boat get's stuck,\nyou have to leave it behind.";
     if (current_action == 9 && current_action_object + 1 == 15)
     {
       removeObjectFromInventory();
       action_response = "You get out of the boat.";
-      changeExits(47, 0, true);
-      changeExits(47, 2, false);
+      map.changeExits(47, 0, true);
+      map.changeExits(47, 2, false);
     }
     return true;
   }
   return false;
-}
-
-void MyASGEGame::removeBats()
-{
-  int index = checkRoom(23);
-
-  if (index == -1)
-  {
-    action_response = "There are no bats in this room...";
-  }
-  else
-  {
-    rooms[current_room].roomObjects()[index] = -1;
-  }
-}
-
-void MyASGEGame::removeGhosts()
-{
-  int index = checkRoom(24);
-
-  if (index == -1)
-  {
-    action_response = "There are no ghosts in this room...";
-  }
-  else
-  {
-    rooms[current_room].roomObjects()[index] = -1;
-  }
-}
-
-void MyASGEGame::checkLight()
-{
-  if (light_ignited)
-  {
-    light_amount -= 1;
-
-    if (light_amount == 10)
-    {
-      action_response = "Your light is beginning to flicker out...";
-    }
-    else if (light_amount <= 0)
-    {
-      light_ignited = false;
-      action_response = "Your light went out!";
-    }
-  }
 }
