@@ -6,7 +6,7 @@
 #define PROJECT_INPUT_H
 
 #include "Action.h"
-#include "game/GameConstants.h"
+#include "GameConstants.h"
 #include <Engine/FileIO.h>
 #include <Engine/Keys.h>
 #include <iostream>

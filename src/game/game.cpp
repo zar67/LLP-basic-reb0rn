@@ -66,6 +66,7 @@ void MyASGEGame::play()
 
 void MyASGEGame::loadWords()
 {
+  //@feedback: correct use of portable file IO, well done
   using File = ASGE::FILEIO::File;
   File file = File();
 
@@ -177,6 +178,7 @@ void MyASGEGame::getAction()
     }
   }
 
+  //@feedback, try not to use magic numbers, why does 15 mean?
   if (current_action == -1)
   {
     action_response = "This is not a valid command.";
@@ -224,35 +226,16 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
   {
     signalExit();
   }
+
+  //@feedback, create game states that have their own handlers, update, render
+  // functions instead of using a global function that uses conditionals
   else if (screen_open == DATA::MENU_SCREEN)
   {
-    input_controller.menuOption(key->key, key->action, &menu_option, 2);
-
-    if (key->key == ASGE::KEYS::KEY_ENTER &&
-        key->action == ASGE::KEYS::KEY_RELEASED)
-    {
-      if (menu_option == 0)
-      {
-        play();
-      }
-      else
-      {
-        signalExit();
-      }
-    }
+    menuHandler(key);
   }
   else if (screen_open == DATA::GAME_SCREEN)
   {
-    input_controller.update(key->key, key->action);
-
-    if (key->key == ASGE::KEYS::KEY_ENTER &&
-        key->action == ASGE::KEYS::KEY_RELEASED)
-    {
-      getAction();
-
-      std::string empty_input = "";
-      input_controller.input(&empty_input);
-    }
+    gameHandler(key);
   }
   else if (screen_open == DATA::GAME_OVER_SCREEN)
   {
@@ -274,6 +257,36 @@ void MyASGEGame::keyHandler(ASGE::SharedEventData data)
       {
         signalExit();
       }
+    }
+  }
+}
+void MyASGEGame::gameHandler(const ASGE::KeyEvent* key)
+{
+  input_controller.update(key->key, key->action);
+
+  if (key->key == ASGE::KEYS::KEY_ENTER &&
+      key->action == ASGE::KEYS::KEY_RELEASED)
+  {
+    getAction();
+
+    std::string empty_input = "";
+    input_controller.input(&empty_input);
+  }
+}
+void MyASGEGame::menuHandler(const ASGE::KeyEvent* key)
+{
+  input_controller.menuOption(key->key, key->action, &menu_option, 2);
+
+  if (key->key == ASGE::KEYS::KEY_ENTER &&
+      key->action == ASGE::KEYS::KEY_RELEASED)
+  {
+    if (menu_option == 0)
+    {
+      play();
+    }
+    else
+    {
+      signalExit();
     }
   }
 }
@@ -315,14 +328,23 @@ void MyASGEGame::update(const ASGE::GameTime& game_time)
 
     if (!checkFrozen())
     {
+      //@feedback, with these actions, you should really map them
+      // to an enum or constant as it's not always obvious what they are
+
+      enum Actions
+      {
+        SHOW_ACTIONS = 0,
+        SHOW_INVENTORY = 1
+      };
+
       switch (current_action)
       {
-        case (0):
+        case (SHOW_ACTIONS):
         {
           showActions();
           break;
         }
-        case (1):
+        case (SHOW_INVENTORY):
         {
           showInventory();
           break;
@@ -519,17 +541,7 @@ void MyASGEGame::render(const ASGE::GameTime&)
 
   if (screen_open == DATA::MENU_SCREEN)
   {
-    renderer->renderText("BASIC REB0RN", 317, 200, 3, ASGE::COLOURS::GRAY);
-    renderer->renderText(menu_option == 0 ? ">> PLAY" : "   PLAY",
-                         437,
-                         350,
-                         2,
-                         ASGE::COLOURS::GRAY);
-    renderer->renderText(menu_option == 1 ? ">> QUIT" : "   QUIT",
-                         437,
-                         450,
-                         2,
-                         ASGE::COLOURS::GRAY);
+    renderMenu();
   }
   else if (screen_open == DATA::GAME_SCREEN)
   {
@@ -603,6 +615,14 @@ void MyASGEGame::render(const ASGE::GameTime&)
                          2,
                          ASGE::COLOURS::GRAY);
   }
+}
+void MyASGEGame::renderMenu() const
+{
+  renderer->renderText("BASIC REB0RN", 317, 200, 3, ASGE::COLOURS::GRAY);
+  renderer->renderText(
+    menu_option == 0 ? ">> PLAY" : "   PLAY", 437, 350, 2, ASGE::COLOURS::GRAY);
+  renderer->renderText(
+    menu_option == 1 ? ">> QUIT" : "   QUIT", 437, 450, 2, ASGE::COLOURS::GRAY);
 }
 
 int MyASGEGame::checkInventory(int ID)

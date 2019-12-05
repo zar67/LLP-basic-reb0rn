@@ -5,6 +5,7 @@
 #ifndef PROJECT_ACTION_H
 #define PROJECT_ACTION_H
 
+#include <array>
 #include <string>
 
 class Action
@@ -28,10 +29,13 @@ class Action
   std::string output();
 
  private:
-  int ID;
-  std::string verb;
-  int object;
-  int objects_needed[3];
+  int ID = 0;
+  std::string verb = "";
+  int object = 0;
+
+  // int objects_needed[3];
+  std::array<int, 3> objects_needed;
+
   int room;
   std::string response;
 };

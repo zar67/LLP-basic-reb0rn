@@ -41,7 +41,7 @@ int Action::actionObject()
 
 int* Action::objectsNeeded()
 {
-  return objects_needed;
+  return &objects_needed[0];
 }
 
 int Action::requiredRoom()

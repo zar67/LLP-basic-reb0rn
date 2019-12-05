@@ -2,12 +2,12 @@
 #include <Engine/OGLGame.h>
 #include <string>
 
-#include "../Action.h"
-#include "../Input.h"
 #include "../map/Map.h"
 #include "../map/Object.h"
 #include "../map/Room.h"
+#include "Action.h"
 #include "GameConstants.h"
+#include "Input.h"
 
 /**
  *  An OpenGL Game based on ASGE.
@@ -58,14 +58,19 @@ class MyASGEGame : public ASGE::OGLGame
   Map map = Map();
   Input input_controller = Input();
 
-  Action actions[DATA::ACTION_NUM];
+  // Action actions[DATA::ACTION_NUM];
+  std::array<Action, DATA::ACTION_NUM> actions;
 
-  int inventory[DATA::OBJECT_NUM] = { -1 };
+  //@feedback, a player has an inventory, not the game
+  // int inventory[DATA::OBJECT_NUM] = { -1 };
+  std::array<int, DATA::OBJECT_NUM> inventory = { -1 };
   int num_objects_carrying = 0;
-
   int current_action = -1;
   int current_action_object = -1;
 
+  //@feedback, things like score could have been in a player class
+  // or some sort of player game data struct, along with position, inventory
+  // etc
   int score = 0;
 
   bool axed_tree = false;
@@ -73,4 +78,7 @@ class MyASGEGame : public ASGE::OGLGame
 
   std::string say_value = "";
   std::string action_response = "";
+  void menuHandler(const ASGE::KeyEvent* key);
+  void gameHandler(const ASGE::KeyEvent* key);
+  void renderMenu() const;
 };
