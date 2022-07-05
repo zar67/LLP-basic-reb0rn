@@ -7,6 +7,7 @@ baseurl: /LLP-basic-reb0rn #the sub-path of your site, e.g. /blog/
 
 disqus_shortname: # leave empty if you don't want comments
 google_analytics: false #if set to "true" modify the google_analytycs.html, set to false otherwise
+theme: ''
 
 # Links settings
 links:
